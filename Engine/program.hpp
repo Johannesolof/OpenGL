@@ -34,6 +34,8 @@ namespace engine
 
 		bool bindUniformBuffer(std::string name, const Buffer& buffer) const;
 
+		//bool bindTexture()
+
 	private:
 		std::string _name;
 		GLuint _program;

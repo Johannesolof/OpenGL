@@ -21,7 +21,7 @@ namespace engine
 		fs::path _filepath;
 		std::vector<Mesh> _meshes;
 
-		static Mesh processMesh(aiMesh* mesh);
+		static Mesh processMesh(aiMesh* mesh, const aiScene* scene);
 		void processNode(aiNode* const node, const aiScene* const scene);
 	};
 }

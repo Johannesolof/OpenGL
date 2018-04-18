@@ -23,6 +23,7 @@ namespace engine
 		if (scene->mMetaData != nullptr)
 			auto res = scene->mMetaData->Get("UnitScaleFactor", scaleFactor);
 
+
 		processNode(scene->mRootNode, scene);
 		return true;
 
@@ -36,7 +37,7 @@ namespace engine
 		}
 	}
 
-	Mesh Model::processMesh(aiMesh* mesh)
+	Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
 	{
 		std::vector<GLfloat> positions;
 		std::vector<GLfloat> normals;
@@ -70,6 +71,12 @@ namespace engine
 			}
 		}
 
+		/*if (mesh->mMaterialIndex >= 0)
+		{
+			aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
+			aiTextureType
+		}*/
+
 		return Mesh(positions, normals, tangents, bitangents, texCoords, indices);
 	}
 
@@ -78,7 +85,7 @@ namespace engine
 		for (uint32_t i = 0; i < node->mNumMeshes; ++i)
 		{
 			aiMesh *mesh = scene->mMeshes[node->mMeshes[i]];
-			_meshes.push_back(processMesh(mesh)); // pair<Mesh, pointer to Material>
+			_meshes.push_back(processMesh(mesh, scene)); // pair<Mesh, pointer to Material>
 		}
 		for (uint32_t i = 0; i < node->mNumChildren; ++i)
 		{

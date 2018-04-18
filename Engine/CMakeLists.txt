@@ -30,6 +30,10 @@ add_library( ${PROJECT_NAME}
     base_renderer.cpp
 	buffer.hpp
 	buffer.cpp
+	texture.hpp
+	texture.cpp
+	image.hpp
+	image.cpp
     )
 
 target_include_directories( ${PROJECT_NAME}
