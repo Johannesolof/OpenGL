@@ -24,6 +24,8 @@ void App::drawGui()
 	double s = _frameTime.smoothDelta();
 	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", s * 1000.f, 1 / s);
 
+	//ImGui::Button("Reload shaders", ImVec2(10, 10));
+
 	ImGui::Render();
 	ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
 }
@@ -54,20 +56,25 @@ void App::run()
 	engine::Model floor;
 	floor.load(modelPath);
 
-	fs::path vertPath = "../Assets/Shaders/test.vert";
-	fs::path fragPath = "../Assets/Shaders/test.frag";
-	auto simpleProgram = engine::Program("Simple", vertPath, fragPath);
+	fs::path vertPath = "../Assets/Shaders/gbuffer.vert";
+	fs::path fragPath = "../Assets/Shaders/gbuffer.frag";
+	auto _gbuffer = engine::Program("GBuffer", vertPath, fragPath); // Default constructor does not work
 	
 	struct cameraData_t
 	{
 		glm::mat4 proj;
+		glm::mat4 invProj;
 		glm::mat4 view;
+		glm::mat4 invView;
+		glm::mat4 viewProj;
+		glm::mat4 invViewProj;
+		glm::vec4 wsPosition;	
 	} cameraData;
 
 
 	auto cameraBuffer = engine::Buffer(GL_UNIFORM_BUFFER, &cameraData, sizeof(cameraData));
 
-	simpleProgram.bindUniformBuffer("Camera", cameraBuffer);
+	_gbuffer.bindUniformBuffer("Camera", cameraBuffer);
 	_clearColor = glm::vec4(0.1f, 0.1f, 0.1f, 1.0f);
 
 	glEnable(GL_DEPTH_TEST);
@@ -85,24 +92,30 @@ void App::run()
 
 		cameraData.proj = glm::perspective(glm::radians(45.0f), static_cast<float>(_width) / static_cast<float>(_height), _camera->nearPlane,
 		                                  _camera->farPlane);
+		cameraData.invProj = glm::inverse(cameraData.proj);
 		cameraData.view = _camera->getViewMatrix();
+		cameraData.invView = glm::inverse(cameraData.view);
+		cameraData.viewProj = cameraData.proj * cameraData.view;
+		cameraData.invViewProj = glm::inverse(cameraData.viewProj);
+		//cameraData.wsPosition = glm::vec4(_camera->getPosition(), 1.f);
+
 		glm::mat4 modelMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(1.f, 1.f, 1.f));
 
 		cameraBuffer.update(&cameraData, sizeof(cameraData));
-		simpleProgram.setUniform("modelMatrix", modelMatrix);
+		_gbuffer.setUniform("modelMatrix", modelMatrix);
 
 		glClearColor(_clearColor.x, _clearColor.y, _clearColor.z, _clearColor.w);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
-		simpleProgram.use();
-		shaderBall.draw(simpleProgram);
+		_gbuffer.use();
+		shaderBall.draw(_gbuffer);
 
 		modelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.f, -1.f, 0.f));
 		modelMatrix = glm::rotate(modelMatrix, -glm::half_pi<float>(), engine::worldUp);
-		simpleProgram.setUniform("modelMatrix", modelMatrix);
+		_gbuffer.setUniform("modelMatrix", modelMatrix);
 
-		floor.draw(simpleProgram);
+		floor.draw(_gbuffer);
 
 
 		drawGui();

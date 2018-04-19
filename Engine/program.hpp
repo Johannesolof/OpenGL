@@ -16,6 +16,7 @@ namespace engine
 	class Program
 	{
 	public:
+		Program();
 		Program(std::string name, fs::path vertexPath, fs::path geometryPath, fs::path fragmentPath);
 		Program(std::string name, fs::path vertexPath, fs::path fragmentPath);
 		~Program();

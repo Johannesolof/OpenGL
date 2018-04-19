@@ -12,6 +12,11 @@ namespace engine
 
 	std::unordered_map<std::string, int> Program::_ubos;
 
+	Program::Program()
+		: _name(""), _program(0), _vertexPath(""), _geometryPath(""), _fragmentPath("")
+	{
+	}
+
 	Program::Program(std::string name, fs::path vertexPath, fs::path geometryPath, fs::path fragmentPath)
 		:_name(std::move(name)), _program(0), _vertexPath(std::move(vertexPath)),
 		_geometryPath(std::move(geometryPath)), _fragmentPath(std::move(fragmentPath))
@@ -97,7 +102,6 @@ namespace engine
 
 	std::optional<GLuint> Program::loadAndCompile(GLenum type, const fs::path& path)
 	{
-
 		auto source = readShaderFile(path);
 		if (!source)
 		{

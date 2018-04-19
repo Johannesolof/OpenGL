@@ -16,6 +16,11 @@ glm::mat4 Camera::getViewMatrix() const
 	return glm::lookAt(_position, _position + _direction, _worldUp);
 }
 
+glm::vec3 Camera::getPosition() const
+{
+	return _position;
+}
+
 void Camera::update(const Input& input, float deltaTime)
 {
 	MouseState ms = input.getMouseState();

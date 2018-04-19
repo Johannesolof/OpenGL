@@ -9,7 +9,12 @@ layout (location = 4) in vec2 texCoord;
 layout (std140) uniform Camera 
 {
     mat4 proj;
+    mat4 invProj;
     mat4 view;
+    mat4 invView;
+    mat4 viewProj;
+    mat4 invViewProj;
+    vec4 wsPosition;
 };
 
 uniform mat4 modelMatrix;
