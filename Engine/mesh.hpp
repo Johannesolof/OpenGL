@@ -8,35 +8,68 @@ namespace engine
 {
 	class Program;
 
-	struct Texture
-	{
-		GLuint id;
-		std::string type;
-	};
 
-	class Material
+	struct Material
 	{
-	public:
-		bool hasBaseTexture;
-		Texture baseTexture;
-		glm::vec3 baseColor;
+		enum FlagsType
+		{
+			HasBaseColor = 1 << 0,
+			HasNormal    = 1 << 1,
+			HasMetallic  = 1 << 2,
+			HasRougness  = 1 << 3,
+		};
+
+		struct Data
+		{
+			GLuint flags        = 0x00000000u;
+			glm::vec4 baseColor = glm::vec4(240.f, 177.f, 188.f, 0.f) / 255.f;
+			float metallic      = 0.f;
+			float rougness      = 0.7f;
+		} data;
+
+		GLuint baseColorTexture {0};
+		GLuint normalTexture    {0};
+		GLuint metallicTexture  {0};
+		GLuint rougnessTexture  {0};
+
+		void setBaseColorTexture(GLuint textureHandle)
+		{
+			baseColorTexture = textureHandle;
+			data.flags |= HasBaseColor;
+		}
+
+		void setNormalTexture(GLuint textureHandle)
+		{
+			normalTexture = textureHandle;
+			data.flags |= HasNormal;
+		}
+
+		void setMetallicTexture(GLuint textureHandle)
+		{
+			metallicTexture = textureHandle;
+			data.flags |= HasMetallic;
+		}
 		
-		bool hasNormalTexture;
-		Texture normalTexture;
+		void setRoughnessTexture(GLuint textureHandle)
+		{
+			rougnessTexture = textureHandle;
+			data.flags |= HasRougness;
+		}
 
-		bool hasMetallicTexture;
-		Texture metallicTexture;
-		float metallic;
-
-		bool hasRoughnessTexture;
-		Texture roughnessTexture;
-		float roughness;
+		void resetTextures()
+		{
+			baseColorTexture = 0;
+			normalTexture    = 0;
+			metallicTexture  = 0;
+			rougnessTexture  = 0;
+			data.flags &= ~(HasBaseColor | HasNormal | HasMetallic | HasRougness);
+		}
+		
 	};
 
 	class Mesh
 	{
 	public:
-		void draw(const Program& program) const;
 		Mesh(std::vector<GLfloat> positions, 
 			 std::vector<GLfloat> normals,
 			 std::vector<GLfloat> tangents,
@@ -45,6 +78,8 @@ namespace engine
 			 std::vector<GLuint> indices);
 		~Mesh() = default;
 
+		void draw(const Program& program) const;
+		
 		std::vector<GLfloat> positions;
 		std::vector<GLfloat> normals;
 		std::vector<GLfloat> tangents;
