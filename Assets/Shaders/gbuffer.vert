@@ -32,9 +32,9 @@ out vsData {
 void main()
 {
     vsData.wsPosition = (modelMatrix * vec4(position, 1.f)).xyz;
-    vsData.wsNormal = normal;
-    vsData.wsTangent = tangent;
-    vsData.wsBitanget = bitangent;
-    vsData.texCoord = texCoord;
-    gl_Position = camera.viewProj * vec4(vsData.wsPosition, 1.f);
+    vsData.wsNormal   = mat3(modelMatrix) * normal;
+    vsData.wsTangent  = mat3(modelMatrix) * tangent;
+    vsData.wsBitanget = mat3(modelMatrix) * bitangent;
+    vsData.texCoord   = texCoord;
+    gl_Position       = camera.viewProj * vec4(vsData.wsPosition, 1.f);
 }
