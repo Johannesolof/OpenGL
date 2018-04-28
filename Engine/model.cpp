@@ -3,6 +3,7 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include "program.hpp"
+#include "texture.hpp"
 
 namespace engine
 {

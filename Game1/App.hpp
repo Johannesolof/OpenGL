@@ -1,10 +1,19 @@
 #pragma once
 
-#include <engine.hpp>
+// Include GLEW
+#include <GL/glew.h>
+
+// Include GLFW
+#include <GLFW/glfw3.h>
+
+// Include Imgui
+#include <imgui.h>
+#include "imgui_impl_glfw_gl3.h"
 #include "camera.hpp"
 #include <memory>
 #include "input.hpp"
-#include <memory>
+#include "program.hpp"
+
 
 struct FrameTime
 {
@@ -37,17 +46,21 @@ struct FrameTime
 class App
 {
 public:
-	App(std::string name);
+	explicit App(std::string name);
 	~App();
 
-	void drawGui();
+	bool init();
 	void run();
 
 private:
+	void drawGui();
+	static void resize(GLFWwindow* window, int width, int height);
+
 	std::string _name;
 	int _width;
 	int _height;
 	GLFWwindow* _window = nullptr;
+	glm::vec3 _worldUp = glm::vec3(0.f, 1.f, 0.f);
 	std::shared_ptr<Camera> _camera;
 	std::shared_ptr<Input> _input;
 	glm::vec4 _clearColor;

@@ -5,14 +5,54 @@
 #include <glm/gtc/matrix_transform.inl>
 #include <glm/gtc/constants.inl>
 #include "buffer.hpp"
+#include "model.hpp"
 
 
 App::App(std::string name) : _name(std::move(name)), _width(1280), _height(720), _clearColor(glm::vec4(0.f))
 {
-	_window = engine::InitWindow(_name, _width, _height, 4, 5);
+	_window = nullptr;
 }
 
-App::~App() = default;
+App::~App()
+{
+	glfwTerminate();
+};
+
+bool App::init()
+{
+	if (glfwInit() != GLFW_TRUE)
+	{
+		fprintf(stderr, "Failed to initialize GLFW\n");
+		return false;
+	}
+
+	glfwWindowHint(GLFW_SAMPLES, 1);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
+	//glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+	GLFWwindow* window = glfwCreateWindow(_width, _height, _name.c_str(), nullptr, nullptr);
+	if (window == nullptr)
+	{
+		fprintf(stderr, "Failed to open GLFW window.");
+		glfwTerminate();
+		return false;
+	}
+
+	glfwMakeContextCurrent(window);
+	glewExperimental = true;
+	glewInit();
+	if (glfwInit() != GLFW_TRUE)
+	{
+		fprintf(stderr, "Failed to initialize GLFW with context\n");
+		return false;
+	}
+
+	_window = window;
+
+	return true;
+}
 
 void App::drawGui()
 {
@@ -32,10 +72,10 @@ void App::drawGui()
 
 void App::run()
 {
-	_camera = std::make_shared<Camera>(glm::vec3(0.0f, 0.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f), engine::worldUp);
+	_camera = std::make_shared<Camera>(glm::vec3(0.0f, 0.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f), _worldUp);
 	_input = std::make_shared<Input>(_window);
-	glfwSetFramebufferSizeCallback(_window, engine::FramebufferSizeCallback);
-	engine::PrintOpenGLInfo();
+	glfwSetFramebufferSizeCallback(_window, resize);
+	//engine::PrintOpenGLInfo();
 
 	// Setup ImGui binding
 	ImGui::CreateContext();
@@ -84,11 +124,16 @@ void App::run()
 	glfwSetInputMode(_window, GLFW_STICKY_KEYS, GL_TRUE);
 	while (_input->pressed("quit") != GLFW_PRESS && glfwWindowShouldClose(_window) == 0)
 	{
-		glfwGetFramebufferSize(_window, &_width, &_height);
+		int width, height;
+		glfwGetFramebufferSize(_window, &width, &height);
+		if (width != _width || height != _height)
+		{
+			//resize fbos, textures etc.
+		}
 
 		_frameTime.update(glfwGetTime());
 		_input->update();
-		_camera->update(*_input, _frameTime.deltaTime); // Made sould share the pointer to the input with everything that wants to read it
+		_camera->update(*_input, _frameTime.deltaTime); // Made should share the pointer to the input with everything that wants to read it
 
 		cameraData.proj = glm::perspective(glm::radians(45.0f), static_cast<float>(_width) / static_cast<float>(_height), _camera->nearPlane,
 		                                  _camera->farPlane);
@@ -99,7 +144,8 @@ void App::run()
 		cameraData.invViewProj = glm::inverse(cameraData.viewProj);
 		//cameraData.wsPosition = glm::vec4(_camera->getPosition(), 1.f);
 
-		glm::mat4 modelMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(1.f, 1.f, 1.f));
+		glm::mat4 modelMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(1.f));
+		modelMatrix = glm::rotate(modelMatrix, static_cast<float>(_frameTime.currentTime), _worldUp);
 
 		cameraBuffer.update(&cameraData, sizeof(cameraData));
 		_gbuffer.setUniform("modelMatrix", modelMatrix);
@@ -112,7 +158,7 @@ void App::run()
 		shaderBall.draw(_gbuffer);
 
 		modelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.f, -1.f, 0.f));
-		modelMatrix = glm::rotate(modelMatrix, -glm::half_pi<float>(), engine::worldUp);
+		modelMatrix = glm::rotate(modelMatrix, -glm::half_pi<float>(), _worldUp);
 		_gbuffer.setUniform("modelMatrix", modelMatrix);
 
 		floor.draw(_gbuffer);
@@ -122,6 +168,12 @@ void App::run()
 		glfwSwapBuffers(_window);
 		glfwPollEvents();
 	}
+}
 
-	engine::Terminate();
+
+void App::resize(GLFWwindow* window, int width, int height)
+{
+	// make sure the viewport matches the new window dimensions; note that width and 
+	// height will be significantly larger than specified on retina displays.
+	glViewport(0, 0, width, height);
 }

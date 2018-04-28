@@ -20,7 +20,7 @@ add_library( ${PROJECT_NAME}
     engine.cpp
 	program.hpp
 	program.cpp
-	errors.hpp
+	debug.hpp
 	utils.hpp
 	model.hpp
     model.cpp
@@ -34,6 +34,10 @@ add_library( ${PROJECT_NAME}
 	texture.cpp
 	image.hpp
 	image.cpp
+	object.hpp
+	object.cpp
+	framebuffer.hpp
+	framebuffer.cpp
     )
 
 target_include_directories( ${PROJECT_NAME}

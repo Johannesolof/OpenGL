@@ -23,16 +23,16 @@ glm::vec3 Camera::getPosition() const
 
 void Camera::update(const Input& input, float deltaTime)
 {
-	MouseState ms = input.getMouseState();
+	const MouseState ms = input.getMouseState();
 
 	if (ms.pressed[1])
 	{
-		glm::mat4 yawRot = glm::rotate(-ms.dx * deltaTime * _rotationSpeed, _worldUp);
-		glm::mat4 pitchRot = glm::rotate(-ms.dy * deltaTime * _rotationSpeed, glm::normalize(glm::cross(_direction, _worldUp)));
+		const glm::mat4 yawRot = glm::rotate(-ms.dx * deltaTime * _rotationSpeed, _worldUp);
+		const glm::mat4 pitchRot = glm::rotate(-ms.dy * deltaTime * _rotationSpeed, glm::normalize(glm::cross(_direction, _worldUp)));
 		_direction = glm::vec3(pitchRot * yawRot * glm::vec4(_direction, 0.f));
 	}
 
-	glm::vec3 right = glm::cross(_direction, _worldUp);
+	const glm::vec3 right = glm::cross(_direction, _worldUp);
 
 	if (input.pressed("forward"))
 	{
