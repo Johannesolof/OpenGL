@@ -39,7 +39,7 @@ namespace engine
 		size_t commentBlockBeginIndex = line.find("/*");
 		size_t commentBlockEndIndex = line.find("*/");
 		size_t lineCommentIndex = line.find("//");
-		size_t includeIndex = line.find("#include ");
+		size_t includeIndex = line.find("#include");
 
 		// Change not found to line length instead of -1
 		if (commentBlockBeginIndex == std::string::npos) commentBlockBeginIndex = line.length();
@@ -55,7 +55,7 @@ namespace engine
 
 			// Find the filename
 			std::vector<std::string> partsOfLine;
-			boost::split(partsOfLine, line, boost::is_any_of(" "), boost::token_compress_on);
+			boost::split(partsOfLine, line, boost::is_any_of("\""), boost::token_compress_on);
 			if (partsOfLine.size() > 1)
 			{
 				includeFile.append(partsOfLine[1]); // Filename should be the second word on the line (after include)
@@ -66,6 +66,8 @@ namespace engine
 		return std::nullopt;
 	}
 
+	
+	static auto includePaths = std::vector<std::string>();
 
 	std::optional<std::string> Program::readShaderFile(const fs::path& path)
 	{
@@ -78,9 +80,9 @@ namespace engine
 		{
 			auto includeFile = findIncludeFile(line, path, commentBlocks); // Find include path
 
-			if (includeFile && std::find(_includePaths.begin(), _includePaths.end(), (*includeFile).u8string()) == _includePaths.end()) // If exist and has not been included already
+			if (includeFile && std::find(includePaths.begin(), includePaths.end(), (*includeFile).u8string()) == includePaths.end()) // If exist and has not been included already
 			{
-				_includePaths.emplace_back((*includeFile).u8string());
+				includePaths.emplace_back((*includeFile).u8string());
 				auto includeSource = readShaderFile(*includeFile); // Read include file
 				if (includeSource) // If succes add it to the current file
 				{
@@ -93,6 +95,7 @@ namespace engine
 			source.append(line).append("\n");
 		}
 
+
 		if (source.empty())
 		{
 			return std::nullopt;
@@ -103,6 +106,8 @@ namespace engine
 	std::optional<GLuint> Program::loadAndCompile(GLenum type, const fs::path& path)
 	{
 		auto source = readShaderFile(path);
+		includePaths.clear();
+
 		if (!source)
 		{
 			return std::nullopt;
@@ -257,6 +262,20 @@ namespace engine
 		const auto it = _ubos.insert({name, _ubos.size()}).first;
 		glBindBufferBase(buffer.getType(), it->second, buffer.getHandle());
 		glUniformBlockBinding(_program, uniformIndex, it->second);
+		return true;
+	}
+
+	bool Program::bindSampler(std::string name, GLuint sampler)
+	{	
+		const GLuint uniformIndex = glGetUniformBlockIndex(_program, name.c_str());
+		if (uniformIndex == GL_INVALID_INDEX)
+		{
+			printf("Could not find uniform buffer named '%s' in shader program '%s'", name.c_str(), _name.c_str());
+			return false;
+		}
+		const auto it = _samplers.insert({name, _samplers.size()}).first;
+		glActiveTexture(GL_TEXTURE0 + it->second);
+		glBindTexture(GL_TEXTURE_2D, it->second);
 		return true;
 	}
 }

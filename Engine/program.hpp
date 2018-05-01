@@ -6,6 +6,8 @@
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <unordered_set>
+#include "texture.hpp"
+#include <boost/detail/container_fwd.hpp>
 
 namespace fs = std::experimental::filesystem;
 
@@ -34,8 +36,8 @@ namespace engine
 		void setUniform(const std::string &name, glm::mat4 value) const;
 
 		bool bindUniformBuffer(std::string name, const Buffer& buffer) const;
+		bool bindSampler(std::string name, GLuint sampler);
 
-		//bool bindTexture()
 
 	private:
 		std::string _name;
@@ -46,9 +48,9 @@ namespace engine
 		fs::path _fragmentPath;
 
 		int _includeLinesOffset = 0;
-		std::vector<std::string> _includePaths;
 
 		static std::unordered_map<std::string, int> _ubos;
+		static std::unordered_map<std::string, int> _samplers;
 
 		static std::mutex _readLock;
 
