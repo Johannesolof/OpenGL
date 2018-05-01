@@ -20,8 +20,8 @@ public:
 	};
 
 
-	Texture(GLenum target, GLint interalFormat, GLenum format, GLenum type, const Image& image, TexParamters paramters = {});
-	Texture(GLenum target, GLint interalFormat, GLenum format, GLenum type, int width, int height, TexParamters paramters = {});
+	Texture(GLenum target, GLint interalFormat, GLenum format, GLenum type, const Image& image, TexParamters paramters = {}, bool generateMipMap = false);
+	Texture(GLenum target, GLint interalFormat, GLenum format, GLenum type, int width, int height, TexParamters paramters = {}, bool generateMipMap = false);
 
 	void setParameterInfo(TexParamters paramters);
 	void bind() const;
