@@ -6,7 +6,7 @@
 #include <glm/gtc/constants.inl>
 #include "buffer.hpp"
 #include "model.hpp"
-
+#include <memory>
 
 App::App(std::string name) : _name(std::move(name)), _width(1280), _height(720), _clearColor(glm::vec4(0.f))
 {
@@ -26,7 +26,7 @@ bool App::init()
 		return false;
 	}
 
-	glfwWindowHint(GLFW_SAMPLES, 1);
+	glfwWindowHint(GLFW_SAMPLES, 16);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
 	//glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
@@ -96,9 +96,21 @@ void App::run()
 	engine::Model floor;
 	floor.load(modelPath);
 
-	fs::path vertPath = "../Assets/Shaders/gbuffer.vert";
-	fs::path fragPath = "../Assets/Shaders/gbuffer.frag";
+	fs::path vertPath = "../Assets/Shaders/test.vert";
+	fs::path fragPath = "../Assets/Shaders/test.frag";
 	auto _gbuffer = engine::Program("GBuffer", vertPath, fragPath); // Default constructor does not work
+
+	vertPath = "../Assets/Shaders/fullscreen.vert";
+	fragPath = "../Assets/Shaders/copy.frag";
+	auto copyProgram = engine::Program("Copy", vertPath, fragPath);
+
+
+	//auto depthTexture = je::Create2DTexture(GL_TEXTURE_2D, GL_DEPTH_STENCIL, GL_DEPTH24_STENCIL8, GL_UNSIGNED_BYTE, _width, _height);
+	//auto colorTexture = je::Create2DTexture(GL_TEXTURE_2D, GL_RGBA, GL_RGBA16, GL_UNSIGNED_BYTE, _width, _height);
+	//auto frameBuffer = je::FrameBuffer();
+	//frameBuffer.attachDepthAttachment(depthTexture);
+	//frameBuffer.attachColorAttachment({colorTexture});
+
 	
 	struct cameraData_t
 	{
@@ -142,7 +154,7 @@ void App::run()
 		cameraData.invView = glm::inverse(cameraData.view);
 		cameraData.viewProj = cameraData.proj * cameraData.view;
 		cameraData.invViewProj = glm::inverse(cameraData.viewProj);
-		//cameraData.wsPosition = glm::vec4(_camera->getPosition(), 1.f);
+		cameraData.wsPosition = glm::vec4(_camera->getPosition(), 1.f);
 
 		glm::mat4 modelMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(1.f));
 		modelMatrix = glm::rotate(modelMatrix, static_cast<float>(_frameTime.currentTime), _worldUp);
@@ -153,6 +165,7 @@ void App::run()
 		glClearColor(_clearColor.x, _clearColor.y, _clearColor.z, _clearColor.w);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+		//frameBuffer.bind();
 
 		_gbuffer.use();
 		shaderBall.draw(_gbuffer);
@@ -163,6 +176,9 @@ void App::run()
 
 		floor.draw(_gbuffer);
 
+		//je::FrameBuffer::unBind();
+		//copyProgram.use();
+		//copyProgram.bindSampler("inTexture", frameBuffer.getColorAttachments()[0]->handle);
 
 		drawGui();
 		glfwSwapBuffers(_window);

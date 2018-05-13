@@ -10,7 +10,7 @@
 namespace engine
 {
 
-	std::unordered_map<std::string, int> Program::_ubos;
+	std::unordered_map<std::string, int> _ubos;
 
 	Program::Program()
 		: _name(""), _program(0), _vertexPath(""), _geometryPath(""), _fragmentPath("")
@@ -273,9 +273,9 @@ namespace engine
 			printf("Could not find uniform buffer named '%s' in shader program '%s'", name.c_str(), _name.c_str());
 			return false;
 		}
-		const auto it = _samplers.insert({name, _samplers.size()}).first;
-		glActiveTexture(GL_TEXTURE0 + it->second);
-		glBindTexture(GL_TEXTURE_2D, it->second);
+		//const auto it = _samplers.insert({name, _samplers.size()}).first;
+		//glActiveTexture(GL_TEXTURE0 + it->second);
+		//glBindTexture(GL_TEXTURE_2D, it->second);
 		return true;
 	}
 }

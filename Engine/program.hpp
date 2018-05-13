@@ -5,9 +5,7 @@
 #include <mutex>
 #include <GL/glew.h>
 #include <glm/glm.hpp>
-#include <unordered_set>
-#include "texture.hpp"
-#include <boost/detail/container_fwd.hpp>
+#include <unordered_map>
 
 namespace fs = std::experimental::filesystem;
 
@@ -49,8 +47,8 @@ namespace engine
 
 		int _includeLinesOffset = 0;
 
-		static std::unordered_map<std::string, int> _ubos;
-		static std::unordered_map<std::string, int> _samplers;
+		//static std::unordered_map<std::string, int> _ubos;
+	//	static std::unordered_map<std::string, int> _samplers;
 
 		static std::mutex _readLock;
 

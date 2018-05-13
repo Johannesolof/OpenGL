@@ -4,25 +4,28 @@
 #include <vector>
 #include <memory>
 
-class Texture;
-
-class FrameBuffer
+namespace je
 {
-public:
-	FrameBuffer();
-	~FrameBuffer();
+	struct Texture;
 
-	inline void bind() const;
-	inline static void unBind();
-	void attachDepthAttachment(const std::shared_ptr<Texture>& depthAttachment);
-	void attachColorAttachment(const std::vector<std::shared_ptr<Texture>>& colorAttachments);
-	std::shared_ptr<Texture> getDepthAttachment() const;
-	std::vector<std::shared_ptr<Texture>> getColorAttachments() const;
-	void resize();
+	class FrameBuffer
+	{
+	public:
+		FrameBuffer();
+		~FrameBuffer();
 
-private:
+		inline void bind() const;
+		inline static void unBind();
+		void attachDepthAttachment(const std::shared_ptr<je::Texture>& depthAttachment);
+		void attachColorAttachment(const std::vector<std::shared_ptr<je::Texture>>& colorAttachments);
+		std::shared_ptr<je::Texture> getDepthAttachment() const;
+		std::vector<std::shared_ptr<je::Texture>> getColorAttachments() const;
+		void resize();
 
-	GLuint _handle;
-	std::shared_ptr<Texture> _depthAttachment;
-	std::vector<std::shared_ptr<Texture>> _colorAttachments;
-};
+	private:
+
+		GLuint _handle;
+		std::shared_ptr<je::Texture> _depthAttachment;
+		std::vector<std::shared_ptr<je::Texture>> _colorAttachments;
+	};
+}

@@ -3,7 +3,6 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include "program.hpp"
-#include "texture.hpp"
 
 namespace engine
 {
@@ -46,7 +45,7 @@ namespace engine
 		std::vector<GLfloat> bitangents;
 		std::vector<GLfloat> texCoords;
 		std::vector<GLuint>  indices;
-		std::vector<Texture> textures;
+		//std::vector<je::Texture> textures;
 
 		for (uint32_t i = 0; i < mesh->mNumVertices; ++i)
 		{

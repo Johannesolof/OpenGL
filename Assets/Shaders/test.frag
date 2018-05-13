@@ -1,6 +1,6 @@
 #version 450
 
-#include common.glsl
+//#include common.glsl
 
 in vec3 outNormal;
 

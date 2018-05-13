@@ -1,15 +1,13 @@
 #pragma once
 
 #include <GL/glew.h>
-#include <filesystem>
+#include <memory>
+
 
 class Image;
-namespace fs = std::experimental::filesystem;
 
-class Texture
+namespace je
 {
-public:
-
 	struct TexParamters
 	{
 		int minFilter = GL_LINEAR;
@@ -19,23 +17,24 @@ public:
 		int wrapR = GL_CLAMP;
 	};
 
+	struct Texture
+	{
+		GLuint       handle{0};
+		GLenum       target{0};
+		GLint        internalFormat{0};
+		GLenum       format{0};
+		GLenum       type{0};
+		GLsizei      width{0};
+		GLsizei      height{0};
+		TexParamters texParamters{};
+	};
 
-	Texture(GLenum target, GLint interalFormat, GLenum format, GLenum type, const Image& image, TexParamters paramters = {}, bool generateMipMap = false);
-	Texture(GLenum target, GLint interalFormat, GLenum format, GLenum type, int width, int height, TexParamters paramters = {}, bool generateMipMap = false);
 
-	void setParameterInfo(TexParamters paramters);
-	void bind() const;
-	void unBind() const;
+	inline std::shared_ptr<Texture> Create2DTexture(GLenum target, GLint interalFormat, GLenum format, GLenum type, const Image& image, TexParamters paramters = {}, bool generateMipMap = false);
+	inline std::shared_ptr<Texture> Create2DTexture(GLenum target, GLint interalFormat, GLenum format, GLenum type, int width, int height, TexParamters paramters = {}, bool generateMipMap = false);
 
-	inline GLuint getHandle() const;
+	inline void SetParameterInfo(Texture& tex, TexParamters paramters);
+	inline void Bind(Texture& tex);
+	inline void UnBind(Texture& tex);
 
-private:
-	GLuint _handle;
-	GLenum _target;
-	GLint _internalFormat;
-	GLenum _format;
-	GLenum _type;
-	GLsizei _width;
-	GLsizei _height;
-	TexParamters _texParamters;
-};
+}

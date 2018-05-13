@@ -19,12 +19,10 @@ layout (std140) uniform Camera
 
 uniform mat4 modelMatrix;
 
-
-
 out vec3 outNormal;
 
 void main()
 {
-    outNormal = transpose(mat3(modelMatrix)) * normal;
+    outNormal = mat3(modelMatrix) * normal;
     gl_Position = proj * view * modelMatrix * vec4(position, 1.0f);
 }

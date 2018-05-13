@@ -2,53 +2,66 @@
 
 #include "image.hpp"
 
-Texture::Texture( GLenum target, GLint interalFormat, GLenum format, GLenum type, const Image& image, TexParamters paramters, bool generateMipMap)
-	: _target(target), _internalFormat(interalFormat), _format(format), _type(type), _width(image.getWidth()), _height(image.getHeight())
-{
-	_handle = 0;
-	glGenTextures(1, &_handle);
-	bind();
-	glTexImage2D(_target, 0, _internalFormat, _width, _height, 0, _format, _type, image.getPixels());
-	if (generateMipMap)
-		glGenerateMipmap(GL_TEXTURE_2D);
-	unBind();
-}
+namespace je {
 
-Texture::Texture(GLenum target, GLint interalFormat, GLenum format, GLenum type, int width, int height, TexParamters paramters, bool generateMipMap)
-	: _target(target), _internalFormat(interalFormat), _format(format), _type(type), _width(width), _height(height)
-{
-	_handle = 0;
-	glGenTextures(1, &_handle);
-	bind();
-	glTexImage2D(_target, 0, _internalFormat, _width, _height, 0, _format, _type, nullptr);
-	setParameterInfo(paramters);
-	if (generateMipMap)
-		glGenerateMipmap(GL_TEXTURE_2D);
-	unBind();
-}
+	std::shared_ptr<Texture> Create2DTexture(GLenum target, GLint interalFormat, GLenum format, GLenum type,
+		const Image& image, TexParamters paramters, bool generateMipMap)
+	{
+		auto tex = std::make_shared<Texture>();
+		tex->target = target;
+		tex->internalFormat = interalFormat;
+		tex->format = format;
+		tex->type = type;
+		tex->width = image.getWidth();
+		tex->height = image.getHeight();
+		tex->texParamters = paramters;
+		glGenTextures(1, &tex->handle);
+		Bind(*tex);
+		glTexImage2D(tex->target, 0, tex->internalFormat, tex->width, tex->height, 0, tex->format, tex->type, image.getPixels());
+		if (generateMipMap)
+			glGenerateMipmap(tex->handle);
+		UnBind(*tex);
+		return tex;
+	}
 
-void Texture::setParameterInfo(TexParamters paramters)
-{
-	bind();
-	_texParamters = paramters;
-	glTexParameteri(_target, GL_TEXTURE_WRAP_S, _texParamters.wrapS);	
-	glTexParameteri(_target, GL_TEXTURE_WRAP_T, _texParamters.wrapT);
-	glTexParameteri(_target, GL_TEXTURE_MIN_FILTER, _texParamters.minFilter);
-	glTexParameteri(_target, GL_TEXTURE_MAG_FILTER, _texParamters.magFilter);
-	unBind();
-}
+	std::shared_ptr<Texture> Create2DTexture(GLenum target, GLint interalFormat, GLenum format,
+		GLenum type, int width, int height, TexParamters paramters, bool generateMipMap)
+	{
+		auto tex = std::make_shared<Texture>();
+		tex->target = target;
+		tex->internalFormat = interalFormat;
+		tex->format = format;
+		tex->type = type;
+		tex->width = width;
+		tex->height = height;
+		tex->texParamters = paramters;
+		glGenTextures(1, &tex->handle);
+		Bind(*tex);
+		glTexImage2D(tex->target, 0, tex->internalFormat, tex->width, tex->height, 0, tex->format, tex->type, nullptr);
+		if (generateMipMap)
+			glGenerateMipmap(tex->handle);
+		UnBind(*tex);
+		return tex;
+	}
 
-void Texture::bind() const
-{
-	glBindTexture(_target, _handle);
-}
+	void SetParameterInfo(Texture& tex, TexParamters paramters)
+	{
+		Bind(tex);
+		tex.texParamters = paramters;
+		glTexParameteri(tex.target, GL_TEXTURE_WRAP_S, paramters.wrapS);
+		glTexParameteri(tex.target, GL_TEXTURE_WRAP_T, paramters.wrapT);
+		glTexParameteri(tex.target, GL_TEXTURE_MIN_FILTER, paramters.minFilter);
+		glTexParameteri(tex.target, GL_TEXTURE_MAG_FILTER, paramters.magFilter);
+		UnBind(tex);
+	}
 
-void Texture::unBind() const
-{
-	glBindTexture(_target, 0);
-}
+	void Bind(Texture& tex)
+	{
+		glBindTexture(tex.target, tex.handle);
+	}
 
-GLuint Texture::getHandle() const
-{
-	return _handle;
+	void UnBind(Texture& tex)
+	{
+		glBindTexture(tex.target, 0);
+	}
 }
