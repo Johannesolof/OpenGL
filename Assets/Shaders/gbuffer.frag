@@ -19,5 +19,5 @@ out vec4 outColor;
 void main()
 {
     
-    outColor = vec4(vsData.wsNormal, 1.f); 
+    outColor = vec4(normalize(vsData.wsNormal), 1.f); 
 }

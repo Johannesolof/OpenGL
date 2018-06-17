@@ -9,7 +9,7 @@
 
 namespace fs = std::experimental::filesystem;
 
-namespace engine
+namespace je
 {
 	class Buffer;
 

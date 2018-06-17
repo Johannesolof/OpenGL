@@ -1,0 +1,15 @@
+TODO in OpenGL project
+
+-- Rendering stuff --
+SSBO
+Texture bindings
+Material data
+Lines (for debugging)
+
+
+
+
+
+-- late stuff --
+Add #define options to be included in shader programs
+Entity–component–system

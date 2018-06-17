@@ -7,7 +7,7 @@
 
 namespace fs = std::experimental::filesystem;
 
-namespace engine
+namespace je
 {
 	class Program;
 
@@ -15,7 +15,7 @@ namespace engine
 	{
 	public:
 		bool load(const fs::path& path);
-		void draw(const Program& program);
+		void draw();
 
 	private:
 		fs::path _filepath;

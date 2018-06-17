@@ -1,7 +1,7 @@
 #include "mesh.hpp"
 #include "program.hpp"
 
-namespace engine
+namespace je
 {
 	Mesh::Mesh(std::vector<GLfloat> positions,
 		std::vector<GLfloat> normals,
@@ -81,7 +81,7 @@ namespace engine
 		glBindVertexArray(0);
 	}
 
-	void Mesh::draw(const Program& program) const
+	void Mesh::draw() const
 	{
 		glBindVertexArray(_vao);
 		glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(indices.size()), GL_UNSIGNED_INT, nullptr);

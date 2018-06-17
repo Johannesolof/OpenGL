@@ -4,7 +4,7 @@
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 
-namespace engine
+namespace je
 {
 	class Program;
 
@@ -78,7 +78,7 @@ namespace engine
 			 std::vector<GLuint> indices);
 		~Mesh() = default;
 
-		void draw(const Program& program) const;
+		void draw() const;
 		
 		std::vector<GLfloat> positions;
 		std::vector<GLfloat> normals;

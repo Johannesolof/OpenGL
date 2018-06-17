@@ -87,22 +87,25 @@ void App::run()
 
 
 	fs::path modelPath = "../Assets/Models/cube.obj";
-	engine::Model cube;
+	je::Model cube;
 	cube.load(modelPath);
 	modelPath = "../Assets/Models/ShaderBall.obj";
-	engine::Model shaderBall;
+	je::Model shaderBall;
 	shaderBall.load(modelPath);
 	modelPath = "../Assets/Models/Floor.obj";
-	engine::Model floor;
+	je::Model floor;
 	floor.load(modelPath);
+	modelPath = "../Assets/Models/arrow.obj";
+	je::Model arrow;
+	arrow.load(modelPath);
 
 	fs::path vertPath = "../Assets/Shaders/test.vert";
 	fs::path fragPath = "../Assets/Shaders/test.frag";
-	auto _gbuffer = engine::Program("GBuffer", vertPath, fragPath); // Default constructor does not work
+	auto _gbuffer = je::Program("GBuffer", vertPath, fragPath); // Default constructor does not work
 
 	vertPath = "../Assets/Shaders/fullscreen.vert";
 	fragPath = "../Assets/Shaders/copy.frag";
-	auto copyProgram = engine::Program("Copy", vertPath, fragPath);
+	auto copyProgram = je::Program("Copy", vertPath, fragPath);
 
 
 	//auto depthTexture = je::Create2DTexture(GL_TEXTURE_2D, GL_DEPTH_STENCIL, GL_DEPTH24_STENCIL8, GL_UNSIGNED_BYTE, _width, _height);
@@ -124,7 +127,7 @@ void App::run()
 	} cameraData;
 
 
-	auto cameraBuffer = engine::Buffer(GL_UNIFORM_BUFFER, &cameraData, sizeof(cameraData));
+	auto cameraBuffer = je::Buffer(GL_UNIFORM_BUFFER, &cameraData, sizeof(cameraData));
 
 	_gbuffer.bindUniformBuffer("Camera", cameraBuffer);
 	_clearColor = glm::vec4(0.1f, 0.1f, 0.1f, 1.0f);
@@ -161,20 +164,36 @@ void App::run()
 
 		cameraBuffer.update(&cameraData, sizeof(cameraData));
 		_gbuffer.setUniform("modelMatrix", modelMatrix);
-
+		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		glClearColor(_clearColor.x, _clearColor.y, _clearColor.z, _clearColor.w);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		//frameBuffer.bind();
 
 		_gbuffer.use();
-		shaderBall.draw(_gbuffer);
+		//shaderBall.draw();
 
 		modelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.f, -1.f, 0.f));
 		modelMatrix = glm::rotate(modelMatrix, -glm::half_pi<float>(), _worldUp);
 		_gbuffer.setUniform("modelMatrix", modelMatrix);
 
-		floor.draw(_gbuffer);
+		floor.draw();
+
+		modelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.f, 1.f, 0.f));
+		_gbuffer.setUniform("modelMatrix", modelMatrix);
+		arrow.draw();
+		modelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.f, 0.0f, 0.f));
+		_gbuffer.setUniform("modelMatrix", modelMatrix);
+		arrow.draw();
+		//modelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.f, 0.f, 0.5f));
+		modelMatrix = glm::rotate(modelMatrix, glm::half_pi<float>(), glm::vec3(1.f, 0.f, 0.f));
+		_gbuffer.setUniform("modelMatrix", modelMatrix);
+		arrow.draw();
+		//modelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.5f, 0.f, 0.f));
+		modelMatrix = glm::rotate(modelMatrix, -glm::half_pi<float>(), glm::vec3(0.f, 0.f, 1.f));
+		_gbuffer.setUniform("modelMatrix", modelMatrix);
+
+		arrow.draw();
 
 		//je::FrameBuffer::unBind();
 		//copyProgram.use();

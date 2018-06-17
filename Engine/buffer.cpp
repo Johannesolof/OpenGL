@@ -2,37 +2,27 @@
 #include <cstdio>
 #include <cstring>
 
-namespace engine
+namespace je
 {
 	Buffer::Buffer(GLenum type, const void* data, size_t size)
-		: _type(type), _bufferSize(size)
+		: type(type), bufferSize(size)
 	{
-		glGenBuffers(1, &_handle);
-		glBindBuffer(type, _handle);
+		glGenBuffers(1, &handle);
+		glBindBuffer(type, handle);
 		glBufferData(type, size, data, GL_DYNAMIC_DRAW);
 		glBindBuffer(type, 0);
 	}
 
 	void Buffer::update(const void* data, size_t size) const
 	{
-		if (size > _bufferSize)
+		if (size > bufferSize)
 		{
-			printf("Buffer %d too small for the data", _handle);
+			printf("Buffer %d too small for the data", handle);
 			return;
 		}
-		glBindBuffer(_type, _handle);
-		GLvoid* p = glMapBuffer(_type, GL_WRITE_ONLY);
+		glBindBuffer(type, handle);
+		GLvoid* p = glMapBuffer(type, GL_WRITE_ONLY);
 		memcpy(p, data, size);
-		glUnmapBuffer(_type);
-	}
-
-	GLuint Buffer::getHandle() const
-	{
-		return _handle;
-	}
-
-	GLenum Buffer::getType() const
-	{
-		return _type;
+		glUnmapBuffer(type);
 	}
 }

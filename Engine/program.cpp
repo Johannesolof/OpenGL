@@ -7,7 +7,7 @@
 #include <boost/algorithm/string.hpp>
 #include "buffer.hpp"
 
-namespace engine
+namespace je
 {
 
 	std::unordered_map<std::string, int> _ubos;
@@ -246,9 +246,9 @@ namespace engine
 
 	bool Program::bindUniformBuffer(std::string name, const Buffer& buffer) const
 	{
-		if (buffer.getType() != GL_UNIFORM_BUFFER)
+		if (buffer.type != GL_UNIFORM_BUFFER)
 		{
-			printf("Buffer is not a GL_UNIFORM_BUFFER, actual buffer type: %d", buffer.getType());
+			printf("Buffer is not a GL_UNIFORM_BUFFER, actual buffer type: %d", buffer.type);
 			return false;
 		}
 
@@ -260,7 +260,7 @@ namespace engine
 		}
 
 		const auto it = _ubos.insert({name, _ubos.size()}).first;
-		glBindBufferBase(buffer.getType(), it->second, buffer.getHandle());
+		glBindBufferBase(buffer.type, it->second, buffer.handle);
 		glUniformBlockBinding(_program, uniformIndex, it->second);
 		return true;
 	}

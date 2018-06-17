@@ -4,7 +4,7 @@
 #include <assimp/postprocess.h>
 #include "program.hpp"
 
-namespace engine
+namespace je
 {
 	bool Model::load(const fs::path& path)
 	{
@@ -29,11 +29,11 @@ namespace engine
 
 	}
 
-	void Model::draw(const Program& program)
+	void Model::draw()
 	{
 		for (auto &mesh : _meshes)
 		{
-			mesh.draw(program);
+			mesh.draw();
 		}
 	}
 

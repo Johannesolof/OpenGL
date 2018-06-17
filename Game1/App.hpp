@@ -65,6 +65,6 @@ private:
 	std::shared_ptr<Input> _input;
 	glm::vec4 _clearColor;
 	FrameTime _frameTime;
-	engine::Program _gbuffer;
+	je::Program _gbuffer;
 };
 

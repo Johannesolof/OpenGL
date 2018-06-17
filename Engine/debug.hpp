@@ -2,7 +2,7 @@
 #include <GL/glew.h>
 #include <cstdio>
 
-namespace engine
+namespace je
 {
 	struct Error
 	{

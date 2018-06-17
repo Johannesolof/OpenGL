@@ -1,7 +1,7 @@
 #pragma once
 #include <GL/glew.h>
 
-namespace engine
+namespace je
 {
 	class Buffer
 	{
@@ -10,12 +10,8 @@ namespace engine
 
 		void update(const void* data, size_t size) const;
 
-		GLuint getHandle() const;
-		GLenum getType() const;
-
-	private:
-		GLuint _handle = 0;
-		GLenum _type;
-		size_t _bufferSize;
+		GLuint handle = 0;
+		GLenum type;
+		size_t bufferSize;
 	};
 }
