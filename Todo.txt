@@ -3,13 +3,18 @@ TODO in OpenGL project
 -- Rendering stuff --
 SSBO
 Texture bindings
-Material data
+Material data - did a simple structure
 Lines (for debugging)
-
-
-
+Environment maps
+    reflections - different rougnesses
+    irradiance map
 
 
 -- late stuff --
 Add #define options to be included in shader programs
 Entity–component–system
+
+
+
+-- Completed --
+Simple forward shader
