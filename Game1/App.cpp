@@ -99,9 +99,9 @@ void App::run()
 	je::Model arrow;
 	arrow.load(modelPath);
 
-	fs::path vertPath = "../Assets/Shaders/test.vert";
-	fs::path fragPath = "../Assets/Shaders/test.frag";
-	auto _gbuffer = je::Program("GBuffer", vertPath, fragPath); // Default constructor does not work
+	fs::path vertPath = "../Assets/Shaders/forward.vert";
+	fs::path fragPath = "../Assets/Shaders/forward.frag";
+	auto forward = je::Program("Forward", vertPath, fragPath); // Default constructor does not work
 
 	vertPath = "../Assets/Shaders/fullscreen.vert";
 	fragPath = "../Assets/Shaders/copy.frag";
@@ -126,10 +126,20 @@ void App::run()
 		glm::vec4 wsPosition;	
 	} cameraData;
 
-
 	auto cameraBuffer = je::Buffer(GL_UNIFORM_BUFFER, &cameraData, sizeof(cameraData));
+	forward.bindUniformBuffer("Camera", cameraBuffer);
+	
+	struct material_t
+	{
+		glm::vec4 color = glm::vec4(1, 1, 1, 1);
+		float metalness = 0.f;
+		float rougness = 1.f;
+	} materialData;
 
-	_gbuffer.bindUniformBuffer("Camera", cameraBuffer);
+	auto materialBuffer = je::Buffer(GL_UNIFORM_BUFFER, &materialData, sizeof(materialData));
+	materialBuffer.update(&materialData, sizeof(materialData));
+	forward.bindUniformBuffer("Material", materialBuffer);
+
 	_clearColor = glm::vec4(0.1f, 0.1f, 0.1f, 1.0f);
 
 	glEnable(GL_DEPTH_TEST);
@@ -163,37 +173,37 @@ void App::run()
 		modelMatrix = glm::rotate(modelMatrix, static_cast<float>(_frameTime.currentTime), _worldUp);
 
 		cameraBuffer.update(&cameraData, sizeof(cameraData));
-		_gbuffer.setUniform("modelMatrix", modelMatrix);
+		forward.setUniform("modelMatrix", modelMatrix);
 		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		glClearColor(_clearColor.x, _clearColor.y, _clearColor.z, _clearColor.w);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		//frameBuffer.bind();
 
-		_gbuffer.use();
-		//shaderBall.draw();
+		forward.use();
+		shaderBall.draw();
 
 		modelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.f, -1.f, 0.f));
 		modelMatrix = glm::rotate(modelMatrix, -glm::half_pi<float>(), _worldUp);
-		_gbuffer.setUniform("modelMatrix", modelMatrix);
+		forward.setUniform("modelMatrix", modelMatrix);
 
 		floor.draw();
 
-		modelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.f, 1.f, 0.f));
-		_gbuffer.setUniform("modelMatrix", modelMatrix);
-		arrow.draw();
-		modelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.f, 0.0f, 0.f));
-		_gbuffer.setUniform("modelMatrix", modelMatrix);
-		arrow.draw();
-		//modelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.f, 0.f, 0.5f));
-		modelMatrix = glm::rotate(modelMatrix, glm::half_pi<float>(), glm::vec3(1.f, 0.f, 0.f));
-		_gbuffer.setUniform("modelMatrix", modelMatrix);
-		arrow.draw();
-		//modelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.5f, 0.f, 0.f));
-		modelMatrix = glm::rotate(modelMatrix, -glm::half_pi<float>(), glm::vec3(0.f, 0.f, 1.f));
-		_gbuffer.setUniform("modelMatrix", modelMatrix);
+		//modelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.f, 1.f, 0.f));
+		//_gbuffer.setUniform("modelMatrix", modelMatrix);
+		//arrow.draw();
+		//modelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.f, 0.0f, 0.f));
+		//_gbuffer.setUniform("modelMatrix", modelMatrix);
+		//arrow.draw();
+		////modelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.f, 0.f, 0.5f));
+		//modelMatrix = glm::rotate(modelMatrix, glm::half_pi<float>(), glm::vec3(1.f, 0.f, 0.f));
+		//_gbuffer.setUniform("modelMatrix", modelMatrix);
+		//arrow.draw();
+		////modelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.5f, 0.f, 0.f));
+		//modelMatrix = glm::rotate(modelMatrix, -glm::half_pi<float>(), glm::vec3(0.f, 0.f, 1.f));
+		//_gbuffer.setUniform("modelMatrix", modelMatrix);
 
-		arrow.draw();
+		//arrow.draw();
 
 		//je::FrameBuffer::unBind();
 		//copyProgram.use();

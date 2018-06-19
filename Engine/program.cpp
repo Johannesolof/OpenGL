@@ -136,7 +136,7 @@ namespace je
 				err = cLog;
 				delete[] cLog;
 			}
-			fprintf(stderr, "ShaderError: %s", err.c_str());
+			fprintf(stderr, "ShaderError, %s: %s", _name.c_str(), err.c_str());
 			return std::nullopt;
 		}
 		return id;
