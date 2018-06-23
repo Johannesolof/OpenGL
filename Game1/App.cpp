@@ -2,11 +2,11 @@
 #include <utility>
 #include "camera.hpp"
 #include "input.hpp"
-#include <glm/gtc/matrix_transform.inl>
 #include <glm/gtc/constants.inl>
 #include "buffer.hpp"
 #include "model.hpp"
 #include <memory>
+#include <glm/gtc/matrix_transform.inl>
 
 App::App(std::string name) : _name(std::move(name)), _width(1280), _height(720), _clearColor(glm::vec4(0.f))
 {
@@ -72,7 +72,7 @@ void App::drawGui()
 
 void App::run()
 {
-	_camera = std::make_shared<Camera>(glm::vec3(0.0f, 0.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f), _worldUp);
+	_camera = std::make_shared<Camera>(glm::vec3(0.0f, 0.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f), _worldUp, _width, _height);
 	_input = std::make_shared<Input>(_window);
 	glfwSetFramebufferSizeCallback(_window, resize);
 	//engine::PrintOpenGLInfo();
@@ -115,18 +115,8 @@ void App::run()
 	//frameBuffer.attachColorAttachment({colorTexture});
 
 	
-	struct cameraData_t
-	{
-		glm::mat4 proj;
-		glm::mat4 invProj;
-		glm::mat4 view;
-		glm::mat4 invView;
-		glm::mat4 viewProj;
-		glm::mat4 invViewProj;
-		glm::vec4 wsPosition;	
-	} cameraData;
 
-	auto cameraBuffer = je::Buffer(GL_UNIFORM_BUFFER, &cameraData, sizeof(cameraData));
+	auto cameraBuffer = je::Buffer(GL_UNIFORM_BUFFER, &_camera->cameraData, sizeof _camera->cameraData);
 	forward.bindUniformBuffer("Camera", cameraBuffer);
 	
 	struct material_t
@@ -136,7 +126,7 @@ void App::run()
 		float rougness = 1.f;
 	} materialData;
 
-	auto materialBuffer = je::Buffer(GL_UNIFORM_BUFFER, &materialData, sizeof(materialData));
+	auto materialBuffer = je::Buffer(GL_UNIFORM_BUFFER, &materialData, sizeof materialData);
 	materialBuffer.update(&materialData, sizeof(materialData));
 	forward.bindUniformBuffer("Material", materialBuffer);
 
@@ -153,6 +143,9 @@ void App::run()
 		glfwGetFramebufferSize(_window, &width, &height);
 		if (width != _width || height != _height)
 		{
+			_width = width; _height = height;
+			glViewport(0, 0, _width, _height);
+			_camera->resize(width, height);
 			//resize fbos, textures etc.
 		}
 
@@ -160,19 +153,11 @@ void App::run()
 		_input->update();
 		_camera->update(*_input, _frameTime.deltaTime); // Made should share the pointer to the input with everything that wants to read it
 
-		cameraData.proj = glm::perspective(glm::radians(45.0f), static_cast<float>(_width) / static_cast<float>(_height), _camera->nearPlane,
-		                                  _camera->farPlane);
-		cameraData.invProj = glm::inverse(cameraData.proj);
-		cameraData.view = _camera->getViewMatrix();
-		cameraData.invView = glm::inverse(cameraData.view);
-		cameraData.viewProj = cameraData.proj * cameraData.view;
-		cameraData.invViewProj = glm::inverse(cameraData.viewProj);
-		cameraData.wsPosition = glm::vec4(_camera->getPosition(), 1.f);
 
 		glm::mat4 modelMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(1.f));
 		modelMatrix = glm::rotate(modelMatrix, static_cast<float>(_frameTime.currentTime), _worldUp);
 
-		cameraBuffer.update(&cameraData, sizeof(cameraData));
+		cameraBuffer.update(&_camera->cameraData, sizeof _camera->cameraData);
 		forward.setUniform("modelMatrix", modelMatrix);
 		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		glClearColor(_clearColor.x, _clearColor.y, _clearColor.z, _clearColor.w);
@@ -189,25 +174,6 @@ void App::run()
 
 		floor.draw();
 
-		//modelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.f, 1.f, 0.f));
-		//_gbuffer.setUniform("modelMatrix", modelMatrix);
-		//arrow.draw();
-		//modelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.f, 0.0f, 0.f));
-		//_gbuffer.setUniform("modelMatrix", modelMatrix);
-		//arrow.draw();
-		////modelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.f, 0.f, 0.5f));
-		//modelMatrix = glm::rotate(modelMatrix, glm::half_pi<float>(), glm::vec3(1.f, 0.f, 0.f));
-		//_gbuffer.setUniform("modelMatrix", modelMatrix);
-		//arrow.draw();
-		////modelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.5f, 0.f, 0.f));
-		//modelMatrix = glm::rotate(modelMatrix, -glm::half_pi<float>(), glm::vec3(0.f, 0.f, 1.f));
-		//_gbuffer.setUniform("modelMatrix", modelMatrix);
-
-		//arrow.draw();
-
-		//je::FrameBuffer::unBind();
-		//copyProgram.use();
-		//copyProgram.bindSampler("inTexture", frameBuffer.getColorAttachments()[0]->handle);
 
 		drawGui();
 		glfwSwapBuffers(_window);
@@ -220,5 +186,4 @@ void App::resize(GLFWwindow* window, int width, int height)
 {
 	// make sure the viewport matches the new window dimensions; note that width and 
 	// height will be significantly larger than specified on retina displays.
-	glViewport(0, 0, width, height);
 }
