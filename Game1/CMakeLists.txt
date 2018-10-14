@@ -10,7 +10,9 @@ add_executable( ${PROJECT_NAME}
 	camera.hpp
     camera.cpp
 	input.hpp
-	input.cpp
+    input.cpp
+    Shapes/ShapeFactory.hpp
+    Shapes/ShapeFactory.cpp
 )
 
 target_link_libraries( ${PROJECT_NAME}

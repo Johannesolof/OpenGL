@@ -37,14 +37,11 @@ struct light_t
     float intensity;
 } light;
 
-
-in vec3 outNormal;
-
 out vec4 outColor;
 
 void main()
 {
-    vec3 n = normalize(vsData.wsNormal);                       // Normal vector
+    vec3 n = normalize(vsData.wsNormal);                           // Normal vector
     vec3 v = normalize(camera.wsPosition.xyz - vsData.wsPosition); // View vector
 
     // Use metallic to find diffuse and specular color.
@@ -63,7 +60,7 @@ void main()
     vec3 one_F0 = 1.0f - F0;
 
     light_t light;
-    light.wsPosition = vec4(1, 10, 1, 1);
+    light.wsPosition = vec4(5, 5, 5, 1);
     light.color = vec4(1, 1, 1, 1);
     light.intensity = 100.f;
 

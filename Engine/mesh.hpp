@@ -13,10 +13,10 @@ namespace je
 	{
 		enum FlagsType
 		{
-			HasBaseColor = 1 << 0,
-			HasNormal    = 1 << 1,
-			HasMetallic  = 1 << 2,
-			HasRougness  = 1 << 3,
+			HasBaseColor  = 1 << 0,
+			HasNormal     = 1 << 1,
+			HasMetallic   = 1 << 2,
+			HasRoughness  = 1 << 3,
 		};
 
 		struct Data
@@ -53,7 +53,7 @@ namespace je
 		void setRoughnessTexture(GLuint textureHandle)
 		{
 			rougnessTexture = textureHandle;
-			data.flags |= HasRougness;
+			data.flags |= HasRoughness;
 		}
 
 		void resetTextures()
@@ -62,7 +62,7 @@ namespace je
 			normalTexture    = 0;
 			metallicTexture  = 0;
 			rougnessTexture  = 0;
-			data.flags &= ~(HasBaseColor | HasNormal | HasMetallic | HasRougness);
+			data.flags &= ~(HasBaseColor | HasNormal | HasMetallic | HasRoughness);
 		}
 		
 	};
@@ -70,12 +70,13 @@ namespace je
 	class Mesh
 	{
 	public:
-		Mesh(std::vector<GLfloat> positions, 
-			 std::vector<GLfloat> normals,
-			 std::vector<GLfloat> tangents,
-			 std::vector<GLfloat> bitangents,
-			 std::vector<GLfloat> texCoords,
-			 std::vector<GLuint> indices);
+		Mesh(const std::vector<GLfloat>& positions, 
+			 const std::vector<GLfloat>& normals,
+			 const std::vector<GLfloat>& tangents,
+			 const std::vector<GLfloat>& bitangents,
+			 const std::vector<GLfloat>& texCoords,
+			 const std::vector<GLuint>&  indices,
+			 GLenum mode);
 		~Mesh() = default;
 
 		void draw() const;
@@ -83,14 +84,15 @@ namespace je
 		std::vector<GLfloat> positions;
 		std::vector<GLfloat> normals;
 		std::vector<GLfloat> tangents;
-		std::vector<GLfloat> bitangents;
+		std::vector<GLfloat> biTangents;
 		std::vector<GLfloat> texCoords;
 		std::vector<GLuint> indices;
 
 	private:
         GLuint _vao;
-		GLuint _vboPositions, _vboNormals, _vboTangents, _vboBitangents, _vboTexCoords; 
+		GLuint _vboPositions, _vboNormals, _vboTangents, _vboBiTangents, _vboTexCoords; 
 		GLuint _ebo;
+		GLenum _mode;
 
         void setupMesh();
 	};

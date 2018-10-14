@@ -77,7 +77,7 @@ namespace je
 			aiTextureType
 		}*/
 
-		return Mesh(positions, normals, tangents, bitangents, texCoords, indices);
+		return Mesh(positions, normals, tangents, bitangents, texCoords, indices, GL_TRIANGLES);
 	}
 
 	void Model::processNode(aiNode* const node, const aiScene* const scene)

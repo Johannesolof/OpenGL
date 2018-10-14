@@ -9,6 +9,7 @@
 #include <glm/gtc/matrix_transform.inl>
 #include "texture.hpp"
 #include "image.hpp"
+#include "Shapes/ShapeFactory.hpp"
 
 App::App(std::string name) : _name(std::move(name)), _width(1280), _height(720), _clearColor(glm::vec4(0.f))
 {
@@ -53,23 +54,21 @@ bool App::init()
 
 	_window = window;
 
+
 	return true;
 }
 
 void App::drawGui()
 {
-	ImGui_ImplGlfwGL3_NewFrame();
 
 	// 1. Show a simple window.
 	// Tip: if we don't call ImGui::Begin()/ImGui::End() the widgets automatically appears in a window called "Debug".
 	ImGui::ColorEdit3("clear color", reinterpret_cast<float*>(&_clearColor)); // Edit 3 floats representing a color
 	double s = _frameTime.smoothDelta();
-	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", s * 1000.f, 1 / s);
 
 	//ImGui::Button("Reload shaders", ImVec2(10, 10));
 
-	ImGui::Render();
-	ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
+
 }
 
 void App::run()
@@ -100,6 +99,8 @@ void App::run()
 	modelPath = "../Assets/Models/arrow.obj";
 	je::Model arrow;
 	arrow.load(modelPath);
+
+	je::Mesh cube2 = createCube();
 
 	std::filesystem::path vertPath = "../Assets/Shaders/forward.vert";
 	std::filesystem::path fragPath = "../Assets/Shaders/forward.frag";
@@ -155,25 +156,27 @@ void App::run()
 			_camera->resize(width, height);
 			//resize fbos, textures etc.
 		}
+		
+		ImGui_ImplGlfwGL3_NewFrame();
 
 		_frameTime.update(static_cast<float>(glfwGetTime()));
+		
+		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", _frameTime.deltaTime * 1000.f, 1 / _frameTime.deltaTime);
+		
 		_input->update();
 		_camera->update(*_input, _frameTime.deltaTime); // Made should share the pointer to the input with everything that wants to read it
 
-
-		glm::mat4 modelMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(1.f));
-		modelMatrix = glm::rotate(modelMatrix, static_cast<float>(_frameTime.currentTime), _worldUp);
-
 		cameraBuffer.update(&_camera->cameraData, sizeof _camera->cameraData);
-		forward.setUniform("modelMatrix", modelMatrix);
 		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		glClearColor(_clearColor.x, _clearColor.y, _clearColor.z, _clearColor.w);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		//frameBuffer.bind();
-
 		forward.use();
-		shaderBall.draw();
+		
+		glm::mat4 modelMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(1.f));
+		modelMatrix = glm::rotate(modelMatrix, static_cast<float>(_frameTime.currentTime), _worldUp);
+		forward.setUniform("modelMatrix", modelMatrix);
+		cube.draw();
 
 		modelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.f, -1.f, 0.f));
 		modelMatrix = glm::rotate(modelMatrix, -glm::half_pi<float>(), _worldUp);
@@ -182,7 +185,10 @@ void App::run()
 		floor.draw();
 
 
-		drawGui();
+		
+		ImGui::Render();
+		ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
+		
 		glfwSwapBuffers(_window);
 		glfwPollEvents();
 	}

@@ -3,18 +3,19 @@
 
 namespace je
 {
-	Mesh::Mesh(std::vector<GLfloat> positions,
-		std::vector<GLfloat> normals,
-		std::vector<GLfloat> tangents,
-		std::vector<GLfloat> bitangents,
-		std::vector<GLfloat> texCoords,
-		std::vector<GLuint> indices)
-		:_vao(0), _vboPositions(0), _vboNormals(0), _vboTangents(0), _vboBitangents(0), _vboTexCoords(0), _ebo(0)
+	Mesh::Mesh(const std::vector<GLfloat>& positions,
+		const std::vector<GLfloat>& normals,
+		const std::vector<GLfloat>& tangents,
+		const std::vector<GLfloat>& biTangents,
+		const std::vector<GLfloat>& texCoords,
+		const std::vector<GLuint>&  indices,
+		GLenum mode)
+		:_vao(0), _vboPositions(0), _vboNormals(0), _vboTangents(0), _vboBiTangents(0), _vboTexCoords(0), _ebo(0), _mode(mode)
 	{
 		this->positions = positions;
 		this->normals = normals;
 		this->tangents = tangents;
-		this->bitangents = bitangents;
+		this->biTangents = biTangents;
 		this->texCoords = texCoords;
 		this->indices = indices;
 		setupMesh();
@@ -27,7 +28,7 @@ namespace je
 		glGenBuffers(1, &_vboPositions);
 		glGenBuffers(1, &_vboNormals);
 		if (!tangents.empty()) glGenBuffers(1, &_vboTangents);
-		if (!bitangents.empty()) glGenBuffers(1, &_vboBitangents);
+		if (!biTangents.empty()) glGenBuffers(1, &_vboBiTangents);
 		if (!texCoords.empty()) glGenBuffers(1, &_vboTexCoords);
 		glGenBuffers(1, &_ebo);
 
@@ -41,11 +42,13 @@ namespace je
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
 
 		// Bind the normal vertex buffer and send the vertex data
-		glBindBuffer(GL_ARRAY_BUFFER, _vboNormals);
-		glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(GLfloat), &normals[0], GL_STATIC_DRAW);
-		glEnableVertexAttribArray(1);
-		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
-
+		if (!normals.empty())
+		{
+			glBindBuffer(GL_ARRAY_BUFFER, _vboNormals);
+			glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(GLfloat), &normals[0], GL_STATIC_DRAW);
+			glEnableVertexAttribArray(1);
+			glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+		}
 		// If exists bind the tangents vertex buffer and send the vertex data
 		if (!tangents.empty())
 		{
@@ -56,10 +59,10 @@ namespace je
 		}
 
 		// If exists bind the tangents vertex buffer and send the vertex data
-		if (!bitangents.empty())
+		if (!biTangents.empty())
 		{
-			glBindBuffer(GL_ARRAY_BUFFER, _vboBitangents);
-			glBufferData(GL_ARRAY_BUFFER, bitangents.size() * sizeof(GLfloat), &bitangents[0], GL_STATIC_DRAW);
+			glBindBuffer(GL_ARRAY_BUFFER, _vboBiTangents);
+			glBufferData(GL_ARRAY_BUFFER, biTangents.size() * sizeof(GLfloat), &biTangents[0], GL_STATIC_DRAW);
 			glEnableVertexAttribArray(3);
 			glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
 		}
