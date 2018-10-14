@@ -1,7 +1,5 @@
 #include "framebuffer.hpp"
 
-#include "texture.hpp"
-
 namespace je
 {
 
@@ -26,35 +24,35 @@ namespace je
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 
-	void FrameBuffer::attachDepthAttachment(const std::shared_ptr<je::Texture>& depthAttachment)
+	void FrameBuffer::attachDepthAttachment(const Texture::Data& depthAttachment)
 	{
 		_depthAttachment = depthAttachment;
 		glBindFramebuffer(GL_FRAMEBUFFER, _handle);
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, depthAttachment->handle, 0);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, depthAttachment.handle, 0);
 		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 			std::printf("ERROR::FRAMEBUFFER:: Framebuffer is not complete!");
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 
-	void FrameBuffer::attachColorAttachment(const std::vector<std::shared_ptr<je::Texture>>& colorAttachments)
+	void FrameBuffer::attachColorAttachment(const std::vector<Texture::Data>& colorAttachments)
 	{
 		_colorAttachments = colorAttachments;
 		glBindFramebuffer(GL_FRAMEBUFFER, _handle);
 		for (size_t i = 0; i < colorAttachments.size(); i++)
 		{
-			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, colorAttachments[i]->handle, 0);
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, colorAttachments[i].handle, 0);
 		}
 		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 			std::printf("ERROR::FRAMEBUFFER:: Framebuffer is not complete!");
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 
-	std::shared_ptr<je::Texture> FrameBuffer::getDepthAttachment() const
+	je::Texture::Data FrameBuffer::getDepthAttachment() const
 	{
 		return _depthAttachment;
 	}
 
-	std::vector<std::shared_ptr<je::Texture>> FrameBuffer::getColorAttachments() const
+	std::vector<je::Texture::Data> FrameBuffer::getColorAttachments() const
 	{
 		return _colorAttachments;
 	}

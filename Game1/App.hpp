@@ -17,10 +17,10 @@
 
 struct FrameTime
 {
-	double deltaTime = 0;
-	double currentTime = 0;
-	double previousTime = 0;
-	double deltaBuffer[10] = { 0 };
+	float deltaTime = 0;
+	float currentTime = 0;
+	float previousTime = 0;
+	float deltaBuffer[10] = { 0 };
 	uint8_t bufferIt = 0;
 
 	double smoothDelta() // Not so smart
@@ -33,7 +33,7 @@ struct FrameTime
 		return tot / 10;
 	}
 
-	void update(double time)
+	void update(float time)
 	{
 		currentTime = time;
 		deltaTime = currentTime - previousTime;

@@ -5,8 +5,6 @@
 
 #include "mesh.hpp"
 
-namespace fs = std::experimental::filesystem;
-
 namespace je
 {
 	class Program;
@@ -14,11 +12,11 @@ namespace je
 	class Model
 	{
 	public:
-		bool load(const fs::path& path);
+		bool load(const std::filesystem::path& path);
 		void draw();
 
 	private:
-		fs::path _filepath;
+		std::filesystem::path _filepath;
 		std::vector<Mesh> _meshes;
 
 		static Mesh processMesh(aiMesh* mesh, const aiScene* scene);

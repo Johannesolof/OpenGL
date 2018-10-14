@@ -7,6 +7,8 @@
 #include "model.hpp"
 #include <memory>
 #include <glm/gtc/matrix_transform.inl>
+#include "texture.hpp"
+#include "image.hpp"
 
 App::App(std::string name) : _name(std::move(name)), _width(1280), _height(720), _clearColor(glm::vec4(0.f))
 {
@@ -86,7 +88,7 @@ void App::run()
 
 
 
-	fs::path modelPath = "../Assets/Models/cube.obj";
+	std::filesystem::path modelPath = "../Assets/Models/cube.obj";
 	je::Model cube;
 	cube.load(modelPath);
 	modelPath = "../Assets/Models/ShaderBall.obj";
@@ -99,8 +101,8 @@ void App::run()
 	je::Model arrow;
 	arrow.load(modelPath);
 
-	fs::path vertPath = "../Assets/Shaders/forward.vert";
-	fs::path fragPath = "../Assets/Shaders/forward.frag";
+	std::filesystem::path vertPath = "../Assets/Shaders/forward.vert";
+	std::filesystem::path fragPath = "../Assets/Shaders/forward.frag";
 	auto forward = je::Program("Forward", vertPath, fragPath); // Default constructor does not work
 
 	vertPath = "../Assets/Shaders/fullscreen.vert";
@@ -114,6 +116,11 @@ void App::run()
 	//frameBuffer.attachDepthAttachment(depthTexture);
 	//frameBuffer.attachColorAttachment({colorTexture});
 
+	auto image = je::LDRImage();
+	image.load("../Assets/Images/RockyDirt.png");
+
+	je::Texture texture = je::Texture(GL_TEXTURE_2D, GL_RGBA, GL_RGB, GL_RGB8, image);
+	texture.bind(0);
 	
 
 	auto cameraBuffer = je::Buffer(GL_UNIFORM_BUFFER, &_camera->cameraData, sizeof _camera->cameraData);
@@ -149,7 +156,7 @@ void App::run()
 			//resize fbos, textures etc.
 		}
 
-		_frameTime.update(glfwGetTime());
+		_frameTime.update(static_cast<float>(glfwGetTime()));
 		_input->update();
 		_camera->update(*_input, _frameTime.deltaTime); // Made should share the pointer to the input with everything that wants to read it
 

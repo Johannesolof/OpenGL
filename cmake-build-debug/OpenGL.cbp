@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="OpenGL"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="msvc8"/>
+		<Option virtualFolders="CMake Files\;CMake Files\Engine\;CMake Files\external\;CMake Files\external\glm\;CMake Files\external\glfw3\;CMake Files\external\assimp\;CMake Files\external_src\;CMake Files\external_src\imgui-1.60\;CMake Files\Game1\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="D:/Dev/OpenGL/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="nmake /NOLOGO /f D:\Dev\OpenGL\cmake-build-debug\Makefile VERBOSE=1 all"/>
+					<CompileFile command="nmake /NOLOGO /f D:\Dev\OpenGL\cmake-build-debug\Makefile VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="nmake /NOLOGO /f D:\Dev\OpenGL\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+					<DistClean command="nmake /NOLOGO /f D:\Dev\OpenGL\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="D:/Dev/OpenGL/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="nmake /NOLOGO /f D:\Dev\OpenGL\cmake-build-debug\Makefile VERBOSE=1 edit_cache"/>
+					<CompileFile command="nmake /NOLOGO /f D:\Dev\OpenGL\cmake-build-debug\Makefile VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="nmake /NOLOGO /f D:\Dev\OpenGL\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+					<DistClean command="nmake /NOLOGO /f D:\Dev\OpenGL\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="D:/Dev/OpenGL/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="nmake /NOLOGO /f D:\Dev\OpenGL\cmake-build-debug\Makefile VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="nmake /NOLOGO /f D:\Dev\OpenGL\cmake-build-debug\Makefile VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="nmake /NOLOGO /f D:\Dev\OpenGL\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+					<DistClean command="nmake /NOLOGO /f D:\Dev\OpenGL\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="Engine">
+				<Option output="D:/Dev/OpenGL/cmake-build-debug/Engine/Engine.lib" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="D:/Dev/OpenGL/cmake-build-debug/Engine"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="msvc8"/>
+				<Compiler>
+					<Add option="-DGLM_ENABLE_EXPERIMENTAL"/>
+					<Add directory="D:/Dev/OpenGL/Engine"/>
+					<Add directory="D:/Dev/OpenGL/external_src/stb-master"/>
+					<Add directory="D:/Dev/OpenGL/external_src/tinyobjloader-1.0.6"/>
+					<Add directory="D:/Dev/OpenGL/external_src/boost-1.67.0"/>
+					<Add directory="D:/Dev/OpenGL/external/glm/include"/>
+					<Add directory="D:/Dev/OpenGL/external/glew/include"/>
+					<Add directory="D:/Dev/OpenGL/external/glfw3/include"/>
+					<Add directory="D:/Dev/OpenGL/external/assimp/include"/>
+					<Add directory="D:/Dev/OpenGL/external_src/imgui-1.60"/>
+					<Add directory="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.13.26128\ATLMFC\include"/>
+					<Add directory="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.13.26128\include"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\NETFXSDK\4.6.1\include\um"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.16299.0\ucrt"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.16299.0\shared"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.16299.0\um"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.16299.0\winrt"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.16299.0\cppwinrt"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="nmake /NOLOGO /f D:\Dev\OpenGL\cmake-build-debug\Engine\Makefile VERBOSE=1 Engine"/>
+					<CompileFile command="nmake /NOLOGO /f D:\Dev\OpenGL\cmake-build-debug\Engine\Makefile VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="nmake /NOLOGO /f D:\Dev\OpenGL\cmake-build-debug\Engine\Makefile VERBOSE=1 clean"/>
+					<DistClean command="nmake /NOLOGO /f D:\Dev\OpenGL\cmake-build-debug\Engine\Makefile VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="Engine/fast">
+				<Option output="D:/Dev/OpenGL/cmake-build-debug/Engine/Engine.lib" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="D:/Dev/OpenGL/cmake-build-debug/Engine"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="msvc8"/>
+				<Compiler>
+					<Add option="-DGLM_ENABLE_EXPERIMENTAL"/>
+					<Add directory="D:/Dev/OpenGL/Engine"/>
+					<Add directory="D:/Dev/OpenGL/external_src/stb-master"/>
+					<Add directory="D:/Dev/OpenGL/external_src/tinyobjloader-1.0.6"/>
+					<Add directory="D:/Dev/OpenGL/external_src/boost-1.67.0"/>
+					<Add directory="D:/Dev/OpenGL/external/glm/include"/>
+					<Add directory="D:/Dev/OpenGL/external/glew/include"/>
+					<Add directory="D:/Dev/OpenGL/external/glfw3/include"/>
+					<Add directory="D:/Dev/OpenGL/external/assimp/include"/>
+					<Add directory="D:/Dev/OpenGL/external_src/imgui-1.60"/>
+					<Add directory="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.13.26128\ATLMFC\include"/>
+					<Add directory="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.13.26128\include"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\NETFXSDK\4.6.1\include\um"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.16299.0\ucrt"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.16299.0\shared"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.16299.0\um"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.16299.0\winrt"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.16299.0\cppwinrt"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="nmake /NOLOGO /f D:\Dev\OpenGL\cmake-build-debug\Engine\Makefile VERBOSE=1 Engine/fast"/>
+					<CompileFile command="nmake /NOLOGO /f D:\Dev\OpenGL\cmake-build-debug\Engine\Makefile VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="nmake /NOLOGO /f D:\Dev\OpenGL\cmake-build-debug\Engine\Makefile VERBOSE=1 clean"/>
+					<DistClean command="nmake /NOLOGO /f D:\Dev\OpenGL\cmake-build-debug\Engine\Makefile VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="imgui">
+				<Option output="D:/Dev/OpenGL/cmake-build-debug/Engine/imgui/imgui.lib" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="D:/Dev/OpenGL/cmake-build-debug/Engine/imgui"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="msvc8"/>
+				<Compiler>
+					<Add option="-DGLM_ENABLE_EXPERIMENTAL"/>
+					<Add directory="D:/Dev/OpenGL/external_src/imgui-1.60"/>
+					<Add directory="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.13.26128\ATLMFC\include"/>
+					<Add directory="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.13.26128\include"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\NETFXSDK\4.6.1\include\um"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.16299.0\ucrt"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.16299.0\shared"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.16299.0\um"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.16299.0\winrt"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.16299.0\cppwinrt"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="nmake /NOLOGO /f D:\Dev\OpenGL\cmake-build-debug\Engine\imgui\Makefile VERBOSE=1 imgui"/>
+					<CompileFile command="nmake /NOLOGO /f D:\Dev\OpenGL\cmake-build-debug\Engine\imgui\Makefile VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="nmake /NOLOGO /f D:\Dev\OpenGL\cmake-build-debug\Engine\imgui\Makefile VERBOSE=1 clean"/>
+					<DistClean command="nmake /NOLOGO /f D:\Dev\OpenGL\cmake-build-debug\Engine\imgui\Makefile VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="imgui/fast">
+				<Option output="D:/Dev/OpenGL/cmake-build-debug/Engine/imgui/imgui.lib" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="D:/Dev/OpenGL/cmake-build-debug/Engine/imgui"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="msvc8"/>
+				<Compiler>
+					<Add option="-DGLM_ENABLE_EXPERIMENTAL"/>
+					<Add directory="D:/Dev/OpenGL/external_src/imgui-1.60"/>
+					<Add directory="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.13.26128\ATLMFC\include"/>
+					<Add directory="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.13.26128\include"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\NETFXSDK\4.6.1\include\um"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.16299.0\ucrt"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.16299.0\shared"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.16299.0\um"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.16299.0\winrt"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.16299.0\cppwinrt"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="nmake /NOLOGO /f D:\Dev\OpenGL\cmake-build-debug\Engine\imgui\Makefile VERBOSE=1 imgui/fast"/>
+					<CompileFile command="nmake /NOLOGO /f D:\Dev\OpenGL\cmake-build-debug\Engine\imgui\Makefile VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="nmake /NOLOGO /f D:\Dev\OpenGL\cmake-build-debug\Engine\imgui\Makefile VERBOSE=1 clean"/>
+					<DistClean command="nmake /NOLOGO /f D:\Dev\OpenGL\cmake-build-debug\Engine\imgui\Makefile VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="Game1">
+				<Option output="D:/Dev/OpenGL/bin/Game1.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="D:/Dev/OpenGL/cmake-build-debug/Game1"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="msvc8"/>
+				<Compiler>
+					<Add option="-DGLM_ENABLE_EXPERIMENTAL"/>
+					<Add directory="D:/Dev/OpenGL/Engine"/>
+					<Add directory="D:/Dev/OpenGL/external_src/stb-master"/>
+					<Add directory="D:/Dev/OpenGL/external_src/tinyobjloader-1.0.6"/>
+					<Add directory="D:/Dev/OpenGL/external_src/boost-1.67.0"/>
+					<Add directory="D:/Dev/OpenGL/external/glm/include"/>
+					<Add directory="D:/Dev/OpenGL/external/glew/include"/>
+					<Add directory="D:/Dev/OpenGL/external/glfw3/include"/>
+					<Add directory="D:/Dev/OpenGL/external/assimp/include"/>
+					<Add directory="D:/Dev/OpenGL/external_src/imgui-1.60"/>
+					<Add directory="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.13.26128\ATLMFC\include"/>
+					<Add directory="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.13.26128\include"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\NETFXSDK\4.6.1\include\um"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.16299.0\ucrt"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.16299.0\shared"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.16299.0\um"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.16299.0\winrt"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.16299.0\cppwinrt"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="nmake /NOLOGO /f D:\Dev\OpenGL\cmake-build-debug\Game1\Makefile VERBOSE=1 Game1"/>
+					<CompileFile command="nmake /NOLOGO /f D:\Dev\OpenGL\cmake-build-debug\Game1\Makefile VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="nmake /NOLOGO /f D:\Dev\OpenGL\cmake-build-debug\Game1\Makefile VERBOSE=1 clean"/>
+					<DistClean command="nmake /NOLOGO /f D:\Dev\OpenGL\cmake-build-debug\Game1\Makefile VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="Game1/fast">
+				<Option output="D:/Dev/OpenGL/bin/Game1.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="D:/Dev/OpenGL/cmake-build-debug/Game1"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="msvc8"/>
+				<Compiler>
+					<Add option="-DGLM_ENABLE_EXPERIMENTAL"/>
+					<Add directory="D:/Dev/OpenGL/Engine"/>
+					<Add directory="D:/Dev/OpenGL/external_src/stb-master"/>
+					<Add directory="D:/Dev/OpenGL/external_src/tinyobjloader-1.0.6"/>
+					<Add directory="D:/Dev/OpenGL/external_src/boost-1.67.0"/>
+					<Add directory="D:/Dev/OpenGL/external/glm/include"/>
+					<Add directory="D:/Dev/OpenGL/external/glew/include"/>
+					<Add directory="D:/Dev/OpenGL/external/glfw3/include"/>
+					<Add directory="D:/Dev/OpenGL/external/assimp/include"/>
+					<Add directory="D:/Dev/OpenGL/external_src/imgui-1.60"/>
+					<Add directory="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.13.26128\ATLMFC\include"/>
+					<Add directory="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.13.26128\include"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\NETFXSDK\4.6.1\include\um"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.16299.0\ucrt"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.16299.0\shared"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.16299.0\um"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.16299.0\winrt"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.16299.0\cppwinrt"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="nmake /NOLOGO /f D:\Dev\OpenGL\cmake-build-debug\Game1\Makefile VERBOSE=1 Game1/fast"/>
+					<CompileFile command="nmake /NOLOGO /f D:\Dev\OpenGL\cmake-build-debug\Game1\Makefile VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="nmake /NOLOGO /f D:\Dev\OpenGL\cmake-build-debug\Game1\Makefile VERBOSE=1 clean"/>
+					<DistClean command="nmake /NOLOGO /f D:\Dev\OpenGL\cmake-build-debug\Game1\Makefile VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="D:/Dev/OpenGL/Engine/base_renderer.cpp">
+			<Option target="Engine"/>
+		</Unit>
+		<Unit filename="D:/Dev/OpenGL/Engine/base_renderer.hpp">
+			<Option target="Engine"/>
+		</Unit>
+		<Unit filename="D:/Dev/OpenGL/Engine/buffer.cpp">
+			<Option target="Engine"/>
+		</Unit>
+		<Unit filename="D:/Dev/OpenGL/Engine/buffer.hpp">
+			<Option target="Engine"/>
+		</Unit>
+		<Unit filename="D:/Dev/OpenGL/Engine/debug.hpp">
+			<Option target="Engine"/>
+		</Unit>
+		<Unit filename="D:/Dev/OpenGL/Engine/engine.cpp">
+			<Option target="Engine"/>
+		</Unit>
+		<Unit filename="D:/Dev/OpenGL/Engine/engine.hpp">
+			<Option target="Engine"/>
+		</Unit>
+		<Unit filename="D:/Dev/OpenGL/Engine/framebuffer.cpp">
+			<Option target="Engine"/>
+		</Unit>
+		<Unit filename="D:/Dev/OpenGL/Engine/framebuffer.hpp">
+			<Option target="Engine"/>
+		</Unit>
+		<Unit filename="D:/Dev/OpenGL/Engine/image.cpp">
+			<Option target="Engine"/>
+		</Unit>
+		<Unit filename="D:/Dev/OpenGL/Engine/image.hpp">
+			<Option target="Engine"/>
+		</Unit>
+		<Unit filename="D:/Dev/OpenGL/Engine/imgui_impl_glfw_gl3.cpp">
+			<Option target="Engine"/>
+		</Unit>
+		<Unit filename="D:/Dev/OpenGL/Engine/imgui_impl_glfw_gl3.h">
+			<Option target="Engine"/>
+		</Unit>
+		<Unit filename="D:/Dev/OpenGL/Engine/mesh.cpp">
+			<Option target="Engine"/>
+		</Unit>
+		<Unit filename="D:/Dev/OpenGL/Engine/mesh.hpp">
+			<Option target="Engine"/>
+		</Unit>
+		<Unit filename="D:/Dev/OpenGL/Engine/model.cpp">
+			<Option target="Engine"/>
+		</Unit>
+		<Unit filename="D:/Dev/OpenGL/Engine/model.hpp">
+			<Option target="Engine"/>
+		</Unit>
+		<Unit filename="D:/Dev/OpenGL/Engine/object.cpp">
+			<Option target="Engine"/>
+		</Unit>
+		<Unit filename="D:/Dev/OpenGL/Engine/object.hpp">
+			<Option target="Engine"/>
+		</Unit>
+		<Unit filename="D:/Dev/OpenGL/Engine/program.cpp">
+			<Option target="Engine"/>
+		</Unit>
+		<Unit filename="D:/Dev/OpenGL/Engine/program.hpp">
+			<Option target="Engine"/>
+		</Unit>
+		<Unit filename="D:/Dev/OpenGL/Engine/texture.cpp">
+			<Option target="Engine"/>
+		</Unit>
+		<Unit filename="D:/Dev/OpenGL/Engine/texture.hpp">
+			<Option target="Engine"/>
+		</Unit>
+		<Unit filename="D:/Dev/OpenGL/Engine/utils.hpp">
+			<Option target="Engine"/>
+		</Unit>
+		<Unit filename="D:/Dev/OpenGL/Game1/App.cpp">
+			<Option target="Game1"/>
+		</Unit>
+		<Unit filename="D:/Dev/OpenGL/Game1/App.hpp">
+			<Option target="Game1"/>
+		</Unit>
+		<Unit filename="D:/Dev/OpenGL/Game1/camera.cpp">
+			<Option target="Game1"/>
+		</Unit>
+		<Unit filename="D:/Dev/OpenGL/Game1/camera.hpp">
+			<Option target="Game1"/>
+		</Unit>
+		<Unit filename="D:/Dev/OpenGL/Game1/input.cpp">
+			<Option target="Game1"/>
+		</Unit>
+		<Unit filename="D:/Dev/OpenGL/Game1/input.hpp">
+			<Option target="Game1"/>
+		</Unit>
+		<Unit filename="D:/Dev/OpenGL/Game1/main.cpp">
+			<Option target="Game1"/>
+		</Unit>
+		<Unit filename="D:/Dev/OpenGL/external_src/imgui-1.60/imconfig.h">
+			<Option target="imgui"/>
+		</Unit>
+		<Unit filename="D:/Dev/OpenGL/external_src/imgui-1.60/imgui.cpp">
+			<Option target="imgui"/>
+		</Unit>
+		<Unit filename="D:/Dev/OpenGL/external_src/imgui-1.60/imgui.h">
+			<Option target="imgui"/>
+		</Unit>
+		<Unit filename="D:/Dev/OpenGL/external_src/imgui-1.60/imgui_demo.cpp">
+			<Option target="imgui"/>
+		</Unit>
+		<Unit filename="D:/Dev/OpenGL/external_src/imgui-1.60/imgui_draw.cpp">
+			<Option target="imgui"/>
+		</Unit>
+		<Unit filename="D:/Dev/OpenGL/external_src/imgui-1.60/imgui_internal.h">
+			<Option target="imgui"/>
+		</Unit>
+		<Unit filename="D:/Dev/OpenGL/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="D:/Dev/OpenGL/VSUserTemplate.user">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="D:/Dev/OpenGL/Engine/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\Engine\"/>
+		</Unit>
+		<Unit filename="D:/Dev/OpenGL/external/glm/glm-config-version.cmake">
+			<Option virtualFolder="CMake Files\external\glm\"/>
+		</Unit>
+		<Unit filename="D:/Dev/OpenGL/external/glm/glm-config.cmake">
+			<Option virtualFolder="CMake Files\external\glm\"/>
+		</Unit>
+		<Unit filename="D:/Dev/OpenGL/external/glfw3/glfw3-config-version.cmake">
+			<Option virtualFolder="CMake Files\external\glfw3\"/>
+		</Unit>
+		<Unit filename="D:/Dev/OpenGL/external/glfw3/glfw3-config.cmake">
+			<Option virtualFolder="CMake Files\external\glfw3\"/>
+		</Unit>
+		<Unit filename="D:/Dev/OpenGL/external/assimp/assimp-config-version.cmake">
+			<Option virtualFolder="CMake Files\external\assimp\"/>
+		</Unit>
+		<Unit filename="D:/Dev/OpenGL/external/assimp/assimp-config.cmake">
+			<Option virtualFolder="CMake Files\external\assimp\"/>
+		</Unit>
+		<Unit filename="D:/Dev/OpenGL/external_src/imgui-1.60/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\external_src\imgui-1.60\"/>
+		</Unit>
+		<Unit filename="D:/Dev/OpenGL/Game1/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\Game1\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

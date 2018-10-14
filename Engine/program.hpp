@@ -7,8 +7,6 @@
 #include <glm/glm.hpp>
 #include <unordered_map>
 
-namespace fs = std::experimental::filesystem;
-
 namespace je
 {
 	class Buffer;
@@ -17,8 +15,8 @@ namespace je
 	{
 	public:
 		Program();
-		Program(std::string name, fs::path vertexPath, fs::path geometryPath, fs::path fragmentPath);
-		Program(std::string name, fs::path vertexPath, fs::path fragmentPath);
+		Program(std::string name, std::filesystem::path vertexPath, std::filesystem::path geometryPath, std::filesystem::path fragmentPath);
+		Program(std::string name, std::filesystem::path vertexPath, std::filesystem::path fragmentPath);
 		~Program();
 
 		bool upload(bool reload = false);
@@ -41,9 +39,9 @@ namespace je
 		std::string _name;
 		GLuint _program;
 
-		fs::path _vertexPath;
-		fs::path _geometryPath;
-		fs::path _fragmentPath;
+		std::filesystem::path _vertexPath;
+		std::filesystem::path _geometryPath;
+		std::filesystem::path _fragmentPath;
 
 		int _includeLinesOffset = 0;
 
@@ -52,9 +50,9 @@ namespace je
 
 		static std::mutex _readLock;
 
-		static std::optional<fs::path> findIncludeFile(const std::string& line, const fs::path& path, int& commentBlocks);
-		std::optional<std::string> readShaderFile(const fs::path& path);
-		std::optional<GLuint> loadAndCompile(GLenum type, const fs::path& path);
+		static std::optional<std::filesystem::path> findIncludeFile(const std::string& line, const std::filesystem::path& path, int& commentBlocks);
+		std::optional<std::string> readShaderFile(const std::filesystem::path& path);
+		std::optional<GLuint> loadAndCompile(GLenum type, const std::filesystem::path& path);
 		bool linkProgram(GLuint program);
 	};
 	

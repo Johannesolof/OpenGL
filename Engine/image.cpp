@@ -3,37 +3,22 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
-Image::Image()
+je::Image::Image()
 	: _width(0), _height(0), _channels(0)
 {
 }
 
-int Image::getWidth() const
-{
-	return _width;
-}
-
-int Image::getHeight() const
-{
-	return _height;
-}
-
-int Image::getChannels() const
-{
-	return _channels;
-}
-
-LDRImage::LDRImage()
+je::LDRImage::LDRImage()
 	: Image(), _pixels(nullptr)
 {
 }
 
-LDRImage::~LDRImage()
+je::LDRImage::~LDRImage()
 {
 	delete[] _pixels;
 }
 
-bool LDRImage::load(const fs::path& filePath)
+bool je::LDRImage::load(const std::filesystem::path& filePath)
 {
 	_pixels = stbi_load(filePath.u8string().c_str(), &_width, &_height, &_channels, 0);
 	if (!_pixels)
@@ -44,23 +29,23 @@ bool LDRImage::load(const fs::path& filePath)
 	return true;
 }
 
-void* LDRImage::getPixels() const
+void* je::LDRImage::getPixels() const
 {
 	return _pixels;
 }
 
 
-HDRImage::HDRImage()
+je::HDRImage::HDRImage()
 	: Image(), _pixels(nullptr)
 {
 }
 
-HDRImage::~HDRImage()
+je::HDRImage::~HDRImage()
 {
 	delete[] _pixels;
 }
 
-bool HDRImage::load(const fs::path& filePath)
+bool je::HDRImage::load(const std::filesystem::path& filePath)
 {
 	_pixels = stbi_loadf(filePath.u8string().c_str(), &_width, &_height, &_channels, 0);
 	if (!_pixels)
@@ -71,7 +56,7 @@ bool HDRImage::load(const fs::path& filePath)
 	return true;
 }
 
-void* HDRImage::getPixels() const
+void* je::HDRImage::getPixels() const
 {
 	return _pixels;
 }

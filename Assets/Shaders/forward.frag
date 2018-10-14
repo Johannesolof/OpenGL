@@ -46,7 +46,7 @@ void main()
 {
     vec3 n = normalize(vsData.wsNormal);                       // Normal vector
     vec3 v = normalize(camera.wsPosition.xyz - vsData.wsPosition); // View vector
-    
+
     // Use metallic to find diffuse and specular color.
     vec3 diffuseColor = (1 - metalness) * color.xyz;
 

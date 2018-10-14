@@ -17,14 +17,14 @@ namespace je
 	{
 	}
 
-	Program::Program(std::string name, fs::path vertexPath, fs::path geometryPath, fs::path fragmentPath)
+	Program::Program(std::string name, std::filesystem::path vertexPath, std::filesystem::path geometryPath, std::filesystem::path fragmentPath)
 		:_name(std::move(name)), _program(0), _vertexPath(std::move(vertexPath)),
 		_geometryPath(std::move(geometryPath)), _fragmentPath(std::move(fragmentPath))
 	{
 		upload(false);
 	}
 
-	Program::Program(std::string name, fs::path vertexPath, fs::path fragmentPath)
+	Program::Program(std::string name, std::filesystem::path vertexPath, std::filesystem::path fragmentPath)
 		: Program(std::move(name), std::move(vertexPath), "", std::move(fragmentPath))
 	{
 	}
@@ -34,7 +34,7 @@ namespace je
 		glDeleteProgram(_program);
 	}
 
-	std::optional<fs::path> Program::findIncludeFile(const std::string& line, const fs::path& path, int& commentBlocks)
+	std::optional<std::filesystem::path> Program::findIncludeFile(const std::string& line, const std::filesystem::path& path, int& commentBlocks)
 	{
 		size_t commentBlockBeginIndex = line.find("/*");
 		size_t commentBlockEndIndex = line.find("*/");
@@ -51,7 +51,7 @@ namespace je
 
 		if (commentBlocks == 0 && lineCommentIndex > includeIndex) // If #inlcude is not commented out
 		{
-			fs::path includeFile = path.parent_path(); // Get directory of the current file
+			std::filesystem::path includeFile = path.parent_path(); // Get directory of the current file
 
 			// Find the filename
 			std::vector<std::string> partsOfLine;
@@ -69,7 +69,7 @@ namespace je
 	
 	static auto includePaths = std::vector<std::string>();
 
-	std::optional<std::string> Program::readShaderFile(const fs::path& path)
+	std::optional<std::string> Program::readShaderFile(const std::filesystem::path& path)
 	{
 		std::ifstream in(path.u8string());
 		std::string source = "";
@@ -103,7 +103,7 @@ namespace je
 		return source;
 	}
 
-	std::optional<GLuint> Program::loadAndCompile(GLenum type, const fs::path& path)
+	std::optional<GLuint> Program::loadAndCompile(GLenum type, const std::filesystem::path& path)
 	{
 		auto source = readShaderFile(path);
 		includePaths.clear();

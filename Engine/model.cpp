@@ -6,7 +6,7 @@
 
 namespace je
 {
-	bool Model::load(const fs::path& path)
+	bool Model::load(const std::filesystem::path& path)
 	{
 		Assimp::Importer importer;
 		const auto scene = importer.ReadFile(path.generic_string(), aiProcess_Triangulate | aiProcess_FlipUVs);
@@ -45,7 +45,7 @@ namespace je
 		std::vector<GLfloat> bitangents;
 		std::vector<GLfloat> texCoords;
 		std::vector<GLuint>  indices;
-		//std::vector<je::Texture> textures;
+		//std::vector<je::TextureData> textures;
 
 		for (uint32_t i = 0; i < mesh->mNumVertices; ++i)
 		{
