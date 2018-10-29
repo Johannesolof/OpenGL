@@ -85,7 +85,8 @@ void App::run()
 	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;   // Enable Gamepad Controls
 	ImGui_ImplGlfwGL3_Init(_window, true);
 
-
+	glPointSize(3.f);
+	glLineWidth(3.f);
 
 	std::filesystem::path modelPath = "../Assets/Models/cube.obj";
 	je::Model cube;
@@ -100,16 +101,25 @@ void App::run()
 	je::Model arrow;
 	arrow.load(modelPath);
 
-	je::Mesh cube2 = createCube();
+	je::Mesh cube2 = createCube(true);
+	je::Mesh cylinder = createCylinder(50);
+	je::Mesh icosphere = createIcosphere(2);
 
 	std::filesystem::path vertPath = "../Assets/Shaders/forward.vert";
 	std::filesystem::path fragPath = "../Assets/Shaders/forward.frag";
-	auto forward = je::Program("Forward", vertPath, fragPath); // Default constructor does not work
+	auto forwardProgram = je::Program("Forward", vertPath, fragPath); // Default constructor does not work
+
+	vertPath = "../Assets/Shaders/simple.vert";
+	fragPath = "../Assets/Shaders/color.frag";
+	auto colorProgram = je::Program("Color", vertPath, fragPath);
+	static glm::vec4 shaderColor(1.f);
+	colorProgram.setUniform("color", shaderColor);
 
 	vertPath = "../Assets/Shaders/fullscreen.vert";
 	fragPath = "../Assets/Shaders/copy.frag";
 	auto copyProgram = je::Program("Copy", vertPath, fragPath);
 
+	je::Program* currentProgram = &forwardProgram;
 
 	//auto depthTexture = je::Create2DTexture(GL_TEXTURE_2D, GL_DEPTH_STENCIL, GL_DEPTH24_STENCIL8, GL_UNSIGNED_BYTE, _width, _height);
 	//auto colorTexture = je::Create2DTexture(GL_TEXTURE_2D, GL_RGBA, GL_RGBA16, GL_UNSIGNED_BYTE, _width, _height);
@@ -122,11 +132,12 @@ void App::run()
 
 	je::Texture texture = je::Texture(GL_TEXTURE_2D, GL_RGBA, GL_RGB, GL_RGB8, image);
 	texture.bind(0);
-	
+
 
 	auto cameraBuffer = je::Buffer(GL_UNIFORM_BUFFER, &_camera->cameraData, sizeof _camera->cameraData);
-	forward.bindUniformBuffer("Camera", cameraBuffer);
-	
+	forwardProgram.bindUniformBuffer("Camera", cameraBuffer);
+	colorProgram.bindUniformBuffer("Camera", cameraBuffer);
+
 	struct material_t
 	{
 		glm::vec4 color = glm::vec4(1, 1, 1, 1);
@@ -136,14 +147,16 @@ void App::run()
 
 	auto materialBuffer = je::Buffer(GL_UNIFORM_BUFFER, &materialData, sizeof materialData);
 	materialBuffer.update(&materialData, sizeof(materialData));
-	forward.bindUniformBuffer("Material", materialBuffer);
+	forwardProgram.bindUniformBuffer("Material", materialBuffer);
 
 	_clearColor = glm::vec4(0.1f, 0.1f, 0.1f, 1.0f);
+
+	currentProgram->use();
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 	//glCullFace(GL_BACK);
-	
+
 	glfwSetInputMode(_window, GLFW_STICKY_KEYS, GL_TRUE);
 	while (_input->pressed("quit") != GLFW_PRESS && glfwWindowShouldClose(_window) == 0)
 	{
@@ -156,39 +169,84 @@ void App::run()
 			_camera->resize(width, height);
 			//resize fbos, textures etc.
 		}
-		
-		ImGui_ImplGlfwGL3_NewFrame();
 
 		_frameTime.update(static_cast<float>(glfwGetTime()));
-		
-		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", _frameTime.deltaTime * 1000.f, 1 / _frameTime.deltaTime);
-		
+
 		_input->update();
 		_camera->update(*_input, _frameTime.deltaTime); // Made should share the pointer to the input with everything that wants to read it
 
 		cameraBuffer.update(&_camera->cameraData, sizeof _camera->cameraData);
-		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		glClearColor(_clearColor.x, _clearColor.y, _clearColor.z, _clearColor.w);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		forward.use();
-		
-		glm::mat4 modelMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(1.f));
-		modelMatrix = glm::rotate(modelMatrix, static_cast<float>(_frameTime.currentTime), _worldUp);
-		forward.setUniform("modelMatrix", modelMatrix);
-		cube.draw();
+		// GUI
+		{
+			ImGui_ImplGlfwGL3_NewFrame();
+			ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", _frameTime.deltaTime * 1000.f, 1 / _frameTime.deltaTime);
+			int polygonMode;
+			ImGui::Text("Polygon mode: "); ImGui::SameLine();
+			if (ImGui::RadioButton("Point", &polygonMode, GL_POINT))
+			{
+				glPolygonMode(GL_FRONT_AND_BACK, polygonMode);
+				colorProgram.use();
+				currentProgram = &colorProgram;
+			}
+			ImGui::SameLine();
+			if (ImGui::RadioButton("Line", &polygonMode, GL_LINE))
+			{
+				glPolygonMode(GL_FRONT_AND_BACK, polygonMode);
+				colorProgram.use();
+				currentProgram = &colorProgram;
+			}
+			ImGui::SameLine();
+			if (ImGui::RadioButton("Fill", &polygonMode, GL_FILL))
+			{
+				glPolygonMode(GL_FRONT_AND_BACK, polygonMode);
+				forwardProgram.use();
+				currentProgram = &forwardProgram;
+			}
 
-		modelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.f, -1.f, 0.f));
+			if (ImGui::ColorEdit3("Shader color", &shaderColor.x))
+				colorProgram.setUniform("color", shaderColor);
+
+
+			if (ImGui::ColorEdit3("Clear color", &_clearColor.x))
+				glClearColor(_clearColor.x, _clearColor.y, _clearColor.z, _clearColor.w);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		}
+
+		glm::mat4 modelMatrix = glm::mat4(1.f);
+		static bool rotate = false;
+		ImGui::Checkbox("Rotate", &rotate);
+
+		modelMatrix = glm::translate(glm::mat4(1.f), glm::vec3(-1.5f, 0.f, 0.f));
+		if (rotate)
+			modelMatrix = glm::rotate(modelMatrix, static_cast<float>(_frameTime.currentTime), _worldUp);
+		modelMatrix = glm::scale(modelMatrix, glm::vec3(1.f, 1.f, 1.f));
+		currentProgram->setUniform("modelMatrix", modelMatrix);
+		icosphere.draw();
+		modelMatrix = glm::translate(glm::mat4(1.f), glm::vec3(0.f, 0.f, 0.f));
+		if (rotate)
+			modelMatrix = glm::rotate(modelMatrix, static_cast<float>(_frameTime.currentTime), _worldUp);
+		modelMatrix = glm::scale(modelMatrix, glm::vec3(1.f, 1.f, 1.f));
+		currentProgram->setUniform("modelMatrix", modelMatrix);
+		cube2.draw();
+		modelMatrix = glm::translate(glm::mat4(1.f), glm::vec3(1.5f, 0.f, 0.f));
+		if (rotate)
+			modelMatrix = glm::rotate(modelMatrix, static_cast<float>(_frameTime.currentTime), _worldUp);
+		modelMatrix = glm::scale(modelMatrix, glm::vec3(1.f, 1.f, 1.f));
+		currentProgram->setUniform("modelMatrix", modelMatrix);
+		cylinder.draw();
+
+		/*modelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.f, -1.f, 0.f));
 		modelMatrix = glm::rotate(modelMatrix, -glm::half_pi<float>(), _worldUp);
-		forward.setUniform("modelMatrix", modelMatrix);
+		currentProgram->setUniform("modelMatrix", modelMatrix);
 
-		floor.draw();
+		floor.draw();*/
 
 
-		
+
 		ImGui::Render();
 		ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
-		
+
 		glfwSwapBuffers(_window);
 		glfwPollEvents();
 	}
