@@ -1,7 +1,6 @@
 #version 450
-
 #include "common.glsl"
-#line 5
+#line 4
 
 layout (std140) uniform Camera 
 {
@@ -36,6 +35,13 @@ struct light_t
     vec4 color;
     float intensity;
 } light;
+
+struct dir_light_t
+{
+    vec4 direction;
+    vec4 color;
+    float intensity;
+} dir_light;
 
 out vec4 outColor;
 
