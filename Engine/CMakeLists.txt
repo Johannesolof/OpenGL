@@ -16,6 +16,10 @@ find_package( ASSIMP REQUIRED)
 add_library( ${PROJECT_NAME}
     imgui_impl_glfw_gl3.h
     imgui_impl_glfw_gl3.cpp
+    #stb_image.h
+    #stb_image_write.h
+    #json.hpp
+    #tiny_gltf.h
     engine.hpp
     engine.cpp
 	program.hpp
@@ -38,6 +42,8 @@ add_library( ${PROJECT_NAME}
 	object.cpp
 	framebuffer.hpp
 	framebuffer.cpp
+    #scene.hpp
+    #scene.cpp
     )
 
 target_include_directories( ${PROJECT_NAME}

@@ -8,7 +8,6 @@ if(WIN32)
     list(APPEND CMAKE_PREFIX_PATH "${CMAKE_SOURCE_DIR}/external/glfw3")
     list(APPEND CMAKE_PREFIX_PATH "${CMAKE_SOURCE_DIR}/external/glew")
     list(APPEND CMAKE_PREFIX_PATH "${CMAKE_SOURCE_DIR}/external/glm")
-    #list(APPEND CMAKE_PREFIX_PATH "${CMAKE_SOURCE_DIR}/external/fbx")
 	list(APPEND CMAKE_PREFIX_PATH "${CMAKE_SOURCE_DIR}/external/assimp")
 endif(WIN32)
 
