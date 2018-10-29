@@ -6,6 +6,7 @@
 #include <utility>
 #include <boost/algorithm/string.hpp>
 #include "buffer.hpp"
+#include "utils.hpp"
 
 namespace je
 {
@@ -18,7 +19,7 @@ namespace je
 	}
 
 	Program::Program(std::string name, std::filesystem::path vertexPath, std::filesystem::path geometryPath, std::filesystem::path fragmentPath)
-		:_name(std::move(name)), _program(0), _vertexPath(std::move(vertexPath)),
+		: _name(std::move(name)), _program(0), _vertexPath(std::move(vertexPath)),
 		_geometryPath(std::move(geometryPath)), _fragmentPath(std::move(fragmentPath))
 	{
 		upload(false);
@@ -66,7 +67,7 @@ namespace je
 		return std::nullopt;
 	}
 
-	
+
 	static auto includePaths = std::vector<std::string>();
 
 	std::optional<std::string> Program::readShaderFile(const std::filesystem::path& path)
@@ -209,6 +210,35 @@ namespace je
 		glUseProgram(_program);
 	}
 
+	//void Program::setUniform(const std::string& name, std::variant<bool, int, float, glm::vec3, glm::vec4, glm::mat3, glm::mat4> value)
+	//{
+	//	const auto it = _uniforms.insert_or_assign(name, value).first;
+
+	//	switch (value.index()) {
+	//	case 0:
+	//		glUniform1i(glGetUniformLocation(_program, name.c_str()), static_cast<int>(value.emplace<bool>()));
+	//		break;
+	//	case 1:
+	//		glUniform1i(glGetUniformLocation(_program, name.c_str()), value.emplace<int>());
+	//		break;
+	//	case 2:
+	//		glUniform1f(glGetUniformLocation(_program, name.c_str()), value.emplace<float>());
+	//		break;
+	//	case 3:
+	//		glUniform3fv(glGetUniformLocation(_program, name.c_str()), 1, glm::value_ptr(value.emplace<glm::vec3>()));
+	//		break;
+	//	case 4:
+	//		glUniform4fv(glGetUniformLocation(_program, name.c_str()), 1, glm::value_ptr(value.emplace<glm::vec4>()));
+	//		break;
+	//	case 5:
+	//		glUniformMatrix3fv(glGetUniformLocation(_program, name.c_str()), 1, false, glm::value_ptr(value.emplace<glm::mat3>()));
+	//		break;
+	//	case 6:
+	//		glUniformMatrix4fv(glGetUniformLocation(_program, name.c_str()), 1, false, glm::value_ptr(value.emplace<glm::mat4>()));
+	//		break;
+	//	}
+	//}
+
 	void Program::setUniform(const std::string& name, bool value) const
 	{
 		glUniform1i(glGetUniformLocation(_program, name.c_str()), static_cast<int>(value));
@@ -259,14 +289,14 @@ namespace je
 			return false;
 		}
 
-		const auto it = _ubos.insert({name, _ubos.size()}).first;
+		const auto it = _ubos.insert({ name, _ubos.size() }).first;
 		glBindBufferBase(buffer.type, it->second, buffer.handle);
 		glUniformBlockBinding(_program, uniformIndex, it->second);
 		return true;
 	}
 
 	bool Program::bindSampler(std::string name, GLuint sampler)
-	{	
+	{
 		const GLuint uniformIndex = glGetUniformBlockIndex(_program, name.c_str());
 		if (uniformIndex == GL_INVALID_INDEX)
 		{

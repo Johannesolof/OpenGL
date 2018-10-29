@@ -6,6 +6,7 @@
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <unordered_map>
+#include <variant>
 
 namespace je
 {
@@ -22,6 +23,8 @@ namespace je
 		bool upload(bool reload = false);
 
 		void use() const;
+
+		//void setUniform(const std::string & name, std::variant<bool, int, float, glm::vec3, glm::vec4, glm::mat3, glm::mat4> value);
 
 		void setUniform(const std::string &name, bool value) const;
 		void setUniform(const std::string &name, int value) const;
@@ -45,6 +48,7 @@ namespace je
 
 		int _includeLinesOffset = 0;
 
+		std::unordered_map<std::string, std::variant<bool, int, float, glm::vec3, glm::vec4, glm::mat3, glm::mat4>> _uniforms;
 		//static std::unordered_map<std::string, int> _ubos;
 	//	static std::unordered_map<std::string, int> _samplers;
 

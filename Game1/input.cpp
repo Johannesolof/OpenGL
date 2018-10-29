@@ -21,8 +21,8 @@ void Input::update()
 	_mouseState->prevXpos = _mouseState->xpos;
 	_mouseState->prevYpos = _mouseState->ypos;
 	glfwGetCursorPos(_window, &_mouseState->xpos, &_mouseState->ypos);
-	_mouseState->dx = _mouseState->xpos - _mouseState->prevXpos;
-	_mouseState->dy = _mouseState->ypos - _mouseState->prevYpos;
+	_mouseState->dx = static_cast<float>(_mouseState->xpos - _mouseState->prevXpos);
+	_mouseState->dy = static_cast<float>(_mouseState->ypos - _mouseState->prevYpos);
 
 	for (int i = 0; i < 5; ++i)
 	{

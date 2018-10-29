@@ -75,7 +75,7 @@ namespace je
 			glEnableVertexAttribArray(4);
 			glVertexAttribPointer(4, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
 		}
-		// Bind the vertex
+		// Bind the indices
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), &indices[0], GL_STATIC_DRAW);
 
